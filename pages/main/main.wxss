@@ -1,0 +1,129 @@
+page {
+  background-size: 100% 100%;
+  background-attachment: fixed; 
+  color: white; 
+
+}
+
+.person-infor {
+   position: relative;
+  color: #f6f6f6;
+  color: white;  
+
+
+}
+.bg {
+  width: 750rpx;
+  height: 260rpx;
+}
+.person-infor view {
+  font-weight: bold;
+  font-size: 36rpx;
+  position: absolute;
+  left: 10%;
+  top: 15%;
+  color: black; 
+}
+
+.userInfo view{
+  font-weight: lighter;
+  position: relative;
+  font-size: 26rpx;
+   margin-top: 5rpx;
+   margin-left: 76rpx;
+  color: black; 
+}
+
+
+.userInfo text{
+  font-weight: bold;
+  font-size: 32rpx;
+  position: relative;
+  margin-left: 120rpx;
+  color: #0D72F4; 
+}
+
+.userInfo progress{
+  display: flex;
+  position: relative;
+  font-size: 26rpx;
+  margin-top: 5rpx;
+  margin-left: 125rpx;
+  border-radius: 10%;
+  width: 340rpx;
+ border-radius: 15rpx
+}
+.otherInfo{
+  font-weight: bold;
+  font-size: 26rpx;
+  position: relative;
+  left: 180%;
+  top: 15%;
+  color: black; 
+}
+
+.avatarUrl {
+  width: 100rpx;
+  height: 100rpx;
+  border: 4rpx solid white;
+  border-radius: 50%;
+}
+
+.qr {
+  width: 100rpx;
+  height: 100rpx;
+}
+
+.choose {
+  position: relative;
+  margin-top: -114rpx;
+  color: #f6f6f6;
+}
+.chooseone{
+  position: relative;
+  color: #f6f6f6;
+}
+.chooseone2{
+  position: relative;
+  color: #f6f6f6;
+}
+
+.choose view {
+  font-weight: bold;
+  font-size: 32rpx;
+  position: absolute;
+  left: 5%;
+  top: 7%;
+}
+
+.chooseone view {
+  font-weight: bold;
+  font-size: 32rpx;
+  position: absolute;
+  left: 5%;
+  top: 7%;
+}
+
+.chooseone2 view {
+  font-weight: bold;
+  font-size: 32rpx;
+  left: 5%;
+  top: 17%;
+  position: relative;
+}
+
+.flex-wrp{
+  margin-top: 20rpx;
+  display:flex;
+}
+.chooseone image {
+  width: 330rpx;
+  height: 320rpx;
+  border-radius: 10rpx;
+}
+
+.choose image {
+  width: 680rpx;
+  height: 320rpx;
+  border-radius: 10rpx;
+}

@@ -1,0 +1,46 @@
+<!--pages/main/main.wxml-->
+<view class='container'>
+
+  <view class='person-infor'>
+    <image class='bg' src='../../images/main_bg.jpg'></image>
+    <view>
+      <image src='{{userImg}}' class='avatarUrl'></image>
+    </view>
+
+    <view class='userInfo'>
+      <text>{{userName}}</text>
+
+      <view>评分:\t{{score}}</view>
+      <progress percent="60" style='border-radius: 15rpx;' color="#4090FF" backgroundColor='#AAD0FF' active stroke-width="5" />
+    </view>
+    <image src='../../imgs/entry_qr.svg' class='qr' bindtap='get_qr_address'></image>
+    <!--注意不要跳转到web_view-->
+  </view>
+
+  <view class='choose' bindtap='goAsk'>
+    <image src='../../images/main_answer.png'></image>
+    <view>经典答题</view>
+    <view style='margin-top: 44rpx; font-size:26rpx;font-weight: normal; color:#FFE109;'>{{answerHint}}</view>
+     <view style='margin-top: 240rpx; font-size:26rpx;font-weight: lighter;'>{{theMounth}}</view>
+  </view>
+
+  <view class='flex-wrp' style="flex-direction:row;">
+    <view class='chooseone' bindtap='aboutWe'>
+      <image src='../../images/main_aboutwe.png'></image>
+      <view>关于我们</view>
+    </view>
+
+    <view class='flex-wrp' style='width: 20rpx;'></view>
+
+    <view class='chooseone' bindtap='moreContent' >
+      <image src='../../images/main_more.png'></image>
+   
+        <view>更多</view>
+        <view style='margin-top: 44rpx; font-size:26rpx;font-weight: normal;'>敬请期待</view>
+    </view>
+
+
+  </view>
+  <view style='color:#D4D4DC;font-size:24rpx; margin-top:180rpx'>扎根于圣经，建基于祷告；</view>
+      <view style='color:#D4D4DC;font-size:24rpx;'>委身于基督，忠心于使命。</view>
+</view>

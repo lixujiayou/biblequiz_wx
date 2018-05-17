@@ -1,0 +1,13 @@
+<view class="container">
+  <view class="container_content">
+    
+    <view class="content_time">{{time}}S</view>
+    
+    <view  class="content_btn">
+      <button class="btn_start" bindtap="startTap">开始</button>
+      <button class="btn_stop" bindtap="stopTap">停止</button>
+      <button class="btn_restart"  bindtap="restartTap">重新开始</button>
+    </view>
+   
+  </view>
+</view>

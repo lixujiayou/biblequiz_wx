@@ -1,0 +1,66 @@
+<view class='header'>
+  <!-- <image src='{{userInfo_icon}}' class='animated lightSpeedIn-left '></image> -->
+
+  
+  <view class='animated lightSpeedIn-left progress_box '  >
+        <canvas  class="progress_bg"   canvas-id="canvasProgressbg">  </canvas>
+        <canvas class="progress_canvas"   canvas-id="canvasProgress">  </canvas>
+        <view  class="progress_text" style='width:100%;height:100%; '>
+           
+             <view class='countdown animated rubberBand' wx:if="{{game_over ? false : true}}">{{countdown}}</view>       
+        </view>    
+    </view>
+ <image class='animated lightSpeedIn-right'   src='{{userInfo_icon}}'></image>
+
+
+
+</view>
+
+<view class='summarize animated flipInX' wx:if="{{game_over}}">
+  <image src="../../images/{{win ? 'PK_success' : 'PK_fail'}}.svg" style='width:300rpx;height:300rpx;'></image>
+</view>
+
+
+
+<view class='body'  wx:if="{{game_over ? false : true}}">
+  <view class='animated animated_zoomIn {{zoomIn}} {{zoomOut}}' wx:if="{{thisTitle ? false : true}}">
+    <image src='../../images/VS.svg' style='width:600rpx;height:600rpx;'></image> 
+  </view>  
+  <text class='title animated zoomIn' style='font-size:34rpx'>{{thisTitle}}</text> 
+  <view class='content animated fadeIn' wx:if="{{thisTitle}}">
+    <view>
+      <view>{{0}}</view>
+      <view class='process'>
+        <view class='process_son' style='height: {{score_myself/500*100}}%;'></view>
+      </view>
+    </view>
+
+
+    <view class='answerarea'  style='width:80%; ' >
+      <view wx:for="{{thisAnswer}}" bindtap='answer' data-index="{{index}}" data-right="{{item.right}}" class="{{index==click_index&&click_index!=='' ? answer_color : ''}}  {{index==status_users_others.user_choose&&status_users_others.user_choose!=='' ? status_users_others.answer_color : ''}} answer ">
+        <view class="invisible {{index==click_index&&click_index!==''&&answer_color=='right' ? 'sign' : ''}}">○</view>
+        <view class="invisible {{index==click_index&&click_index!==''&&answer_color=='error' ? 'sign' : ''}}">×</view>
+        <view style='width:100%;'>{{thisAnswer[index]}}</view>
+        <view class="invisible {{index==status_users_others.user_choose&&status_users_others.user_choose!==''&&status_users_others.answer_color=='right' ? 'sign' : ''}}" style='left: 88%;'>○</view>
+        <view class="invisible {{index==status_users_others.user_choose&&status_users_others.user_choose!==''&&status_users_others.answer_color=='error' ? 'sign' : ''}}" style='left: 88%;'>×</view>
+      </view>
+    </view>
+    <view>
+      <view>{{score_others}}</view>
+      <view class='process'>
+        <view class='process_son' style='height: {{score_others/500*100}}%;'></view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class='body_summarize animated flipInX' wx:if="{{game_over ? true : false}}"> 
+  <view class='exp'> 
+    <image src='../../images/exp.svg'></image>
+   
+  </view>
+  <view>
+    <button bindtap='continue_fighting'>继续挑战</button>
+    <button open-type='share'>炫耀成绩</button>
+  </view>
+</view>
