@@ -1,6 +1,30 @@
 
 const util = require('../../utils/util.js')
 var Bmob = require("../../utils/bmob.js");
+/**
+ * 音频相关
+ */
+var innerAudioContext;
+var timeLittleContext;
+var readyContext;
+var askContext;
+var gameOverContext;
+var clickContext;
+
+var mainBgmPath = "http://bmob-cdn-9637.b0.upaiyun.com/2018/05/23/021776c640e818fb805286d722671273.mp3";
+var timeLittlePath = "http://bmob-cdn-9637.b0.upaiyun.com/2018/05/23/5516d59a40ed7d23805e17895c4e1759.mp3";
+var readyPath = "http://bmob-cdn-9637.b0.upaiyun.com/2018/05/23/918ebffd40cb11ab808cab11101d0ee8.mp3";
+var yesNPath = "http://bmob-cdn-9637.b0.upaiyun.com/2018/05/23/be1fb49c401ae8f68029441d29a1b17e.mp3";
+var yes4Path = "http://bmob-cdn-9637.b0.upaiyun.com/2018/05/23/f8c61306401d4cac8034fc5f5f6b68cb.mp3";
+var yes3Path = "http://bmob-cdn-9637.b0.upaiyun.com/2018/05/23/d3ec0980406f087b80bf4cb1f914d65c.mp3";
+var yes2Path = "http://bmob-cdn-9637.b0.upaiyun.com/2018/05/23/a721416b40de5c79807d69f08518fe40.mp3";
+var yes1Path = "http://bmob-cdn-9637.b0.upaiyun.com/2018/05/23/81edc704409779eb8019658412d7abd5.mp3";
+var askErroPath = "http://bmob-cdn-9637.b0.upaiyun.com/2018/05/23/1638b805404eb28a80760134af0ea392.mp3";
+
+var gameOverPath = "http://bmob-cdn-9637.b0.upaiyun.com/2018/05/23/9426c3d6407fafe78060c9a654c13d2c.mp3";
+var clickPath = "http://bmob-cdn-9637.b0.upaiyun.com/2018/05/23/12654a5c40cc005d806698913c66ea93.mp3";
+
+
 //获取应用实例
 const app = getApp();
 var _this = this;
@@ -26,6 +50,8 @@ Page({
     countdown: countdownNum,//倒计时
 
     interval: "", //定时器
+    lastNum: 0,
+    time: countdownNum, //初始时间
 
 
     count: 0, // 设置 计数器 初始为0
@@ -49,31 +75,16 @@ Page({
     this.fighting_ready() //通知服务器我已准备好了
     //this.exceptional_listener()  //监听异常情况，如断线重新连接  
   },
-  onShareAppMessage: function (res) {
-    const that = this;
-    return {
-      title: '扎根于圣经,建基于祷告.',
-      path: '/pages/entry/entry?currentClickId=' + app.appData.currentClickId,
-      success: function (res) {
-        //转发时向用户关系表中更新一条转发记录(个人为person，群为GId)。
-        require('../../utils/upDateShareInfoToUser_network.js').upDateShareInfoToUser_network(app, that, res)
-        wx.redirectTo({
-          url: '../entry/entry'
-        })
-      }
-    }
-  },
+
   onReady: function () {
     _this = this;
     //创建并返回绘图上下文context对象。 
     // 页面渲染完成  
     this.drawProgressbg();
 
-    // this.drawCircle(2) 
-    // this.countInterval();
+
   },
   fighting_ready() { //通知服务器我已准备好了
-
     var Diary = Bmob.Object.extend("questionBank");
     var query = new Bmob.Query(Diary);
     // 查询所有数据
@@ -115,7 +126,8 @@ Page({
     clearInterval(this.countTimer);
     var that = this;
     that.init(that);
-    this.countInterval();
+    //this.countInterval();
+    this.startTap();
     console.log("重新开始");
   },
   initQuestionBank: function (qb) {
@@ -187,12 +199,18 @@ Page({
       disorganizeAnswers[i] = currentAnswers[num];
     }
     console.log("=====");
+    
     this.setData({
       thisTitle: thisQustions[thisIndex].get('topic'),
       thisAnswer: disorganizeAnswers
     })
   },
   answer(e) {//开始答题
+    if (this.data.time <= 10){
+      this.pauseBgm();
+    }
+    this.stopTap();
+
     const that = this
     if (!that.data.local_click) {  //防止重新选择答案
       var mS = disorganizeAnswers[e.currentTarget.dataset.index];//我的选择
@@ -220,10 +238,10 @@ Page({
           answer_color: 'error'
         })
       }
-      that.setData({
-        game_over: true,
-        win: true,
-      })
+      // that.setData({
+      //   game_over: true,
+      //   win: true,
+      // })
       thisIndex += 1;
 
       setTimeout(function () {
@@ -233,11 +251,8 @@ Page({
       that.setData({
         //local_click: true//本地已经点击,若hasclick仍未false，则说明没有发送数据出去
       })
-
     } else {
-
     }
-
   },
   continue_fighting() {
     wx.redirectTo({
@@ -285,78 +300,291 @@ Page({
     context.stroke();
     context.draw()
   },
-  countInterval: function () {
-    let countdown = countdownNum;
-    let convertUnitTemp = 0;
-    // 设置倒计时 定时器 每100毫秒执行一次，计数器count+1 ,耗时20秒绘一圈
+  // countInterval: function () {
+  //   let countdown = countdownNum;
+  //   let convertUnitTemp = 0;
+  //   var that = this;
+  //   that.init(that);  
+  //   var time = that.data.time;
+  //   this.countTimer = setInterval(() => {
+
+  //     if (this.data.count <= 200) {
+  //       this.drawCircle(this.data.count / (200 / 2))
+  //       convertUnitTemp++;
+
+  //       if (convertUnitTemp == 10) {
+  //         console.log("countdown=" + countdown);
+  //         countdown--
+  //         currentCountdownNum = countdown;//记录当前
+  //         _this.setData({
+  //           countdown
+  //         })
+  //         convertUnitTemp = 0;
+  //       }
+
+  //       this.data.count++;
+
+  //     } else {
+  //       clearInterval(this.countTimer);
+  //     }
+  //   }, 100)
+  // },
+  /**
+    * 开始倒计时
+   */
+  startTap: function () {
+
+    this.startBgm();
+    this.goCountNum(true);
+  },
+  /**
+   * 暂停倒计时
+  */
+  stopTap: function () {
     var that = this;
-    that.init(that);          //这步很重要，没有这步，重复点击会出现多个定时器
-    var time = that.data.time;
+    console.log("记住倒计时" + that.data.time);
+    that.setData({
+      lastNum: that.data.time
+    })
+    that.clearTimeInterval(that)
+  },
+  /**
+   * 继续倒计时
+  */
+  restartTap: function () {
+    this.goCountNum(false);
+  },
+  /**
+ * isRe:是否重新计时
+ */
+  goCountNum: function (isRe) {
+    let convertUnitTemp = 0;
+    var that = this;
+    that.init(that);  //这步很重要，没有这步，重复点击会出现多个定时器
+
+    var time = countdownNum;
+    if (that.data.lastNum != null && that.data.lastNum != 0 && !isRe) {
+      time = that.data.lastNum;
+      console.log("重新倒计时==" + time);
+      time--
+    }
 
 
-    this.countTimer = setInterval(() => {
+    var interval = setInterval(function () {
+      _this.drawCircle(2 - _this.data.count / (countdownNum * 10 / 2))
 
-      if (this.data.count <= 200) {
-        /* 绘制彩色圆环进度条  
-        注意此处 传参 step 取值范围是0到2，
-        所以 计数器 最大值 60 对应 2 做处理，计数器count=60的时候step=2
-        */
-        this.drawCircle(this.data.count / (200 / 2))
-        convertUnitTemp++;
-
-        if (convertUnitTemp == 10) {
-          console.log("countdown=" + countdown);
-          countdown--
-          currentCountdownNum = countdown;//记录当前
-          _this.setData({
-            countdown
-          })
-          convertUnitTemp = 0;
-        }
-
-        this.data.count++;
-
-      } else {
-        clearInterval(this.countTimer);
+      if (convertUnitTemp == 10) {
+        time--;
+        _this.setData({
+          countdown: time
+        })
+        _this.setData({
+          time: time
+        })
+        convertUnitTemp = 0;
+       
       }
+      convertUnitTemp++;
+
+      if (time == 0) {
+        that.clearTimeInterval(that);
+      } else if (time == 10) {
+        if (that.timeLittleContext != null) {
+          that.pauseBgm()
+          that.timeLittleContext.play()
+        }
+      }
+      _this.data.count++;
     }, 100)
+
+    that.setData({
+      interval: interval
+    })
+  },
+  /**
+    * 初始化数据
+   */
+  init: function (that) {
+    var time = countdownNum;
+    if (that.data.lastNum != null && that.data.lastNum != 0) {
+      time = that.data.lastNum;
+    }
+    var interval = ""
+    that.clearTimeInterval(that)
+    that.setData({
+      time: time,
+      interval: interval
+    })
+  },
+  onShareAppMessage: function (res) {
+    const that = this;
+    return {
+      title: '扎根于圣经,建基于祷告.',
+      path: '/pages/entry/entry?currentClickId=' + app.appData.currentClickId,
+      success: function (res) {
+        //转发时向用户关系表中更新一条转发记录(个人为person，群为GId)。
+        require('../../utils/upDateShareInfoToUser_network.js').upDateShareInfoToUser_network(app, that, res)
+        wx.redirectTo({
+          url: '../entry/entry'
+        })
+      }
+    }
+  },
+  /**
+   * 清除interval
+  * @param that
+  */
+  clearTimeInterval: function (that) {
+    var interval = that.data.interval;
+    clearInterval(interval)
+  },
+  initBgm: function () {
+    var that = this;
+    console.log("初始化音频");
+    that.innerAudioContext = wx.createInnerAudioContext()
+    that.innerAudioContext.autoplay = false //是否自动播放
+    that.innerAudioContext.loop = true //是否循环播放
+    that.innerAudioContext.src = mainBgmPath
+    that.innerAudioContext.onPlay(() => {
+    })
+    that.innerAudioContext.onError((res) => {
+    })
+
+    that.timeLittleContext = wx.createInnerAudioContext()
+    that.timeLittleContext.autoplay = false //是否自动播放
+    that.timeLittleContext.loop = false //是否循环播放
+    that.timeLittleContext.src = timeLittlePath
+    that.timeLittleContext.onPlay(() => {
+    })
+    that.timeLittleContext.onError((res) => {
+    })
+
+    that.timeLittleContext = wx.createInnerAudioContext()
+    that.timeLittleContext.autoplay = false //是否自动播放
+    that.timeLittleContext.loop = false //是否循环播放
+    that.timeLittleContext.src = timeLittlePath
+    that.timeLittleContext.onPlay(() => {
+    })
+    that.timeLittleContext.onError((res) => {
+    })
+
+    that.readyContext = wx.createInnerAudioContext()
+    that.readyContext.autoplay = true //是否自动播放
+    that.readyContext.loop = false //是否循环播放
+    that.readyContext.src = readyPath
+    that.readyContext.onPlay(() => {
+    })
+    that.readyContext.onError((res) => {
+    })
+
+
+    that.askContext = wx.createInnerAudioContext()
+    that.askContext.autoplay = false //是否自动播放
+    that.askContext.loop = false //是否循环播放
+    that.askContext.src = yes1Path
+    that.askContext.onPlay(() => {
+    })
+    that.askContext.onError((res) => {
+    })
+
+
+    that.gameOverContext = wx.createInnerAudioContext()
+    that.gameOverContext.autoplay = false //是否自动播放
+    that.gameOverContext.loop = false //是否循环播放
+    that.gameOverContext.src = gameOverPath
+    that.gameOverContext.onPlay(() => {
+    })
+    that.gameOverContext.onError((res) => {
+    })
+
+
+    that.clickContext = wx.createInnerAudioContext()
+    that.clickContext.autoplay = false //是否自动播放
+    that.clickContext.loop = false //是否循环播放
+    that.clickContext.src = clickPath
+    that.clickContext.onPlay(() => {
+    })
+    that.clickContext.onError((res) => {
+    })
+  },
+  /**
+     * 播放音频
+     */
+  startBgm: function () {
+    var that = this;
+    if (that.innerAudioContext == null) {
+      that.initBgm();
+    }
+    if (that.timeLittleContext != null){
+      that.timeLittleContext.stop()
+    }
+    that.innerAudioContext.play()
+  },
+  pauseBgm: function () {
+    var that = this;
+    if (that.innerAudioContext == null) {
+      return;
+    }
+    if (that.timeLittleContext != null) {
+      that.timeLittleContext.pause()
+    }
+    that.innerAudioContext.pause()
+  },
+  /**
+  * 生命周期函数--监听页面隐藏
+  * 在后台运行时停止计时器
+ */
+  onHide: function () {
+    this.pauseBgm();
+    this.stopTap();
   },
   onShow: function () {
-    if (lastCountNum != 0) {
-      var that = _this;
-      that.init(that);
-      _this.countInterval();
-      console.log("onShow")
+    var that = this;
+    if (that.innerAudioContext == null) {
+      that.initBgm()
+    } else {
+      if (this.data.lastNum != null && this.data.lastNum != 0) {
+        this.restartTap();
+        if (this.data.lastNum <= 10) {
+          that.timeLittleContext.play()
+        } else {
+          that.startBgm();
+        }
+      }
     }
-    // console.log("onShow")
-  //  clearInterval(this.countTimer);
   },
-  onHide: function () {
-    var that = _this;
-    console.log("倒计时暂停")
-    that.clearTimeInterval(that)
+  closeBgm: function () {
+    var that = this;
+    if (that.innerAudioContext != null) {
+      that.innerAudioContext.stop()
+      that.innerAudioContext.destroy()
 
-    // that.clearTimeInterval(that)
+      that.timeLittleContext.stop()
+      that.timeLittleContext.destroy()
+
+      that.readyContext.stop()
+      that.readyContext.destroy()
+
+      that.askContext.stop()
+      that.askContext.destroy()
+
+      that.gameOverContext.stop()
+      that.gameOverContext.destroy()
+
+      that.clickContext.stop()
+      that.clickContext.destroy()
+    }
   },
+
+  /**
+    * 生命周期函数--监听页面卸载
+    * 退出本页面时停止计时器
+   */
   onUnload: function () {
-    console.log("倒计时销毁")
-    clearInterval(this.countTimer);
-  }, /**
-     * 初始化数据
-    */
-  init: function (that) {
-    
-   
-
-      var interval = ""
-      clearTimeInterval(that)
-      that.setData({
-        time: countdownNum,
-        interval: interval,
-
-      })
-    
+    var that = this;
+    //  clearInterval(this.countTimer);
+    that.clearTimeInterval(that);
+    that.closeBgm();
 
   }
-
 })
