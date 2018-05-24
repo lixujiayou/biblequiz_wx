@@ -127,15 +127,15 @@ answerarea {
 
 .right {
   /*选择正确的答案颜色*/
-  background: #3ede58;
+  background: #29DDAF;
   color: #fff;
 }
 
 .error {
   /*选择错误的答案颜色*/
-  background: #e53117;
-  color: #fff;
-}
+  background: #FA5954;
+  color: #fff; 
+} 
 
 .invisible {
   display: none;
@@ -152,19 +152,18 @@ answerarea {
 }
 
 .process {
-  width: 28rpx;
+  width: 18rpx;
   height: 560rpx;
-  border-radius: 17rpx;
-  border: 6rpx solid #89d693;
-  background: #15120b;
+  border-radius: 20rpx;
+  background: #416FDB;
   transform: rotate(-180deg);
-  margin: 0 30rpx;
-}
-
+  margin: 0 20rpx;
+} 
+ 
 .process_son {
-  width: 28rpx;
-  border-radius: 14rpx;
-  background: #3ede58;
+  width: 18rpx;
+  border-radius: 20rpx;
+  background: #47E0FD;
 }
 
 .summarize {
@@ -176,14 +175,16 @@ answerarea {
 }
 
 .body_summarize {
-  margin-top: 250rpx;
+  margin-top: 120rpx;
 }
 
 .exp {
   display: flex;
   justify-content: center;
-  font-size: 40rpx;
-  margin: 100rpx 0;
+  font-size: 70rpx;
+  color: #47E0FD;
+   font-weight: bold;
+ 
 }
 
 .body_summarize button {

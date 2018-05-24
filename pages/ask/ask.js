@@ -30,18 +30,17 @@ const app = getApp();
 var _this = this;
 var allQustions = new Array;//所有的答题
 var thisQustions = new Array;//本次的答题
-var answerNum = 5;//每次答题个数
+var answerNum = 10;//每次答题个数
 var thisIndex = 0;//当前题目下标
 var disorganizeAnswers = new Array;//本次答题的答案，乱序
 var countdownNum = 20;//倒计时
 var lastCountNum = 0;//记录关闭倒计时时的最后num
 var currentCountdownNum = 0;//当前倒计时到第几
 
-
-
 var interval;
 var varName;
 var ctx = wx.createCanvasContext('canvasArcCir');
+
 Page({
   data: {
     thisTitle: '',//当前题目
@@ -49,10 +48,13 @@ Page({
     progress_txt: '正在匹配中...',
     countdown: countdownNum,//倒计时
 
+    answerNo: answerNum,
+    thisIndex: thisIndex,//第几道题
+    continuousYes: 0,//连续答对个数
     interval: "", //定时器
+    proScoreInterval: "",//得分进度条定时器
     lastNum: 0,
     time: countdownNum, //初始时间
-
 
     count: 0, // 设置 计数器 初始为0
     countTimer: null, // 设置 定时器 初始为null
@@ -61,7 +63,7 @@ Page({
     click_index: '',//判断用户选择了哪个答案
     answer_color: '',//根据选择正确与否给选项添加背景颜色
     score_myself: 0,//自己的总分
-
+    score_myself_progress: 0,//自己的总分  用于进度条
 
     game_over: false,  //判断此次PK是否结束
     win: false,  //判断当前用户是否胜利
@@ -71,9 +73,8 @@ Page({
     this.setData({
       userInfo_icon: wx.getStorageSync('icon'),
     })
-    this.startAnimate()//定义开始动画
-    this.fighting_ready() //通知服务器我已准备好了
-    //this.exceptional_listener()  //监听异常情况，如断线重新连接  
+
+    this.fighting_ready()//查询数据
   },
 
   onReady: function () {
@@ -84,33 +85,41 @@ Page({
 
 
   },
-  fighting_ready() { //通知服务器我已准备好了
+  loadingTap: function () {
+    wx.showToast({
+      title: "",
+      icon: "loading",
+      duration: 15000
+    })
+  },
+  fighting_ready() {
+    let that = this;
+    that.loadingTap();
     var Diary = Bmob.Object.extend("questionBank");
     var query = new Bmob.Query(Diary);
     // 查询所有数据
     query.find({
       success: function (results) {
+        wx.hideToast()
         console.log("共查询到 " + results.length + " 条记录");
-        // if (_this.allQustions == null){
-        //   _this.allQustions = new Array;
-        // }
-        //   _this.setData({
+
         allQustions = results;
-        //  })
-        _this.initQuestionBank(allQustions);
-        //  _this.initThisAnswer();
-        // 循环处理查询到的数据
-        // for (var i = 0; i < results.length; i++) {
-        //   var object = results[i];
-        //   console.log(object.id + ' - ' + object.get('topic'));
-        // } 
+        that.startAnimate();//定义开始动画
+
+
       },
       error: function (error) {
+        wx.hideToast()
+        wx.showToast({
+          title: "抱歉，系统错误，请重试(" + error.code + " " + error.message + ")",
+          icon: "none",
+        })
+        wx.navigateBack({
+          delta: 1
+        })
         console.log("查询失败: " + error.code + " " + error.message);
       }
     });
-
-
   },
   restAnswer: function () {
     this.data.count = 0;
@@ -142,7 +151,6 @@ Page({
 
 
     if (qb != null && qb.length != 0) {
-
       //为测试数组填充与真实数据一样的数据个数
       for (var i = 0; i < qb.length; i++) {
         arrayTest[i] = i + 1;
@@ -189,7 +197,6 @@ Page({
 
     var num;
     for (var i = 0; i < currentAnswers.length; i++) {
-
       do {
         num = parseInt(Math.random() * currentAnswers.length)
       } while (answersTest[num] == null);
@@ -199,72 +206,174 @@ Page({
       disorganizeAnswers[i] = currentAnswers[num];
     }
     console.log("=====");
-    
+
     this.setData({
       thisTitle: thisQustions[thisIndex].get('topic'),
       thisAnswer: disorganizeAnswers
     })
   },
+
+
+
   answer(e) {//开始答题
-    if (this.data.time <= 10){
+    const that = this
+
+    if (this.data.time <= 10) {
       this.pauseBgm();
     }
     this.stopTap();
 
-    const that = this
+   
+
+    that.startOtherBgm('tap')
     if (!that.data.local_click) {  //防止重新选择答案
       var mS = disorganizeAnswers[e.currentTarget.dataset.index];//我的选择
-      if (mS == thisQustions[thisIndex].get('answers')[0]) {//判断答案是否正确
+      var successAsk = thisQustions[thisIndex].get('answers')[0];//正确选项
+      if (mS == successAsk) {//判断答案是否正确
+        that.data.continuousYes++
 
-        //正确提示
-        // wx.showToast({
-        //   title: "对啦"
-        // })
+        //that.startOtherBgm('y2')
+        //此处有播放音频bug  先关掉
+        if (true) {
+          switch (that.data.continuousYes) {
+            case 1:
+              that.startOtherBgm('y1')
+              break
+            case 2:
+              that.startOtherBgm('y1')
+              break
+            case 3:
+              that.startOtherBgm('y1')
+              break
+            case 4:
+              that.startOtherBgm('y1')
+              break
+            default:
+              that.startOtherBgm('y')
+              break
+          }
+        } else {
+          switch (that.data.continuousYes) {
+            case 1:
+              that.startOtherBgm('y1')
+              break
+            case 2:
+              that.startOtherBgm('y2')
+              break
+            case 3:
+              that.startOtherBgm('y3')
+              break
+            case 4:
+              that.startOtherBgm('y4')
+              break
+            default:
+              that.startOtherBgm('y')
+              break
+          }
+        }
+
+
         //设置按钮为正确颜色
         that.setData({
           click_index: e.currentTarget.dataset.index,
           answer_color: 'right'
         })
         //答对了则加分，时间越少加分越多,总分累加
-        that.setData({
-          score_myself: that.data.score_myself + that.data.countdown * 10
-        })
+        that.countScore()
+
+
+
+        setTimeout(function () {
+          if (thisIndex == thisQustions.length) {
+            that.gameOverContext.play()
+            that.setData({
+              game_over: true,
+              win: true
+            })
+          } else {
+            _this.initThisAnswer();
+          }
+        }, 1500)
+
       } else {
-        // wx.showToast({
-        //   title: "对啦"
-        // })
+
+
         that.setData({
           click_index: e.currentTarget.dataset.index,
-          answer_color: 'error'
+          answer_color: 'error',
+          continuousYes: 0
         })
+
+        // for (var i = 0; i < disorganizeAnswers.length;i++ ){
+        //   if (disorganizeAnswers[i] == successAsk){
+        //     that.setData({
+        //       click_index: i,
+        //       answer_color: 'right'
+        //     })
+        //   }
+        // }
+
+        that.startOtherBgm('erro')
+        that.setData({
+          score_myself: 0
+        })
+
+        setTimeout(function () {
+          that.gameOverContext.play()
+          that.pauseBgm(); 
+          that.stopTap(); 
+          that.setData({
+            game_over: true,
+            win: true
+          })
+        }, 1500)
       }
-      // that.setData({
-      //   game_over: true,
-      //   win: true,
-      // })
-      thisIndex += 1;
-
-      setTimeout(function () {
-        _this.initThisAnswer();
-      }, 1500)
-
+     // that.progressAnime() 
+    
+      thisIndex += 1
       that.setData({
-        //local_click: true//本地已经点击,若hasclick仍未false，则说明没有发送数据出去
+        thisIndex: thisIndex
       })
-    } else {
     }
+    that.clearTimeInterval(that);
+
+  },
+  /**
+   * 计算得分
+   */
+  countScore: function () {
+    let that = this;
+    let theScore;
+
+    console.log("==" + that.data.time);
+
+    if (that.data.time >= 16) {
+      theScore = 10
+    } else if (that.data.time >= 13) {
+      theScore = 8
+    } else if (that.data.time >= 7) {
+      theScore = 6
+    } else {
+      theScore = 4
+    }
+    theScore += that.data.score_myself
+    that.setData({
+      score_myself: theScore
+    })
+    console.log("得分" + theScore);
   },
   continue_fighting() {
-    wx.redirectTo({
-      url: '../entry/entry'
+    wx.navigateBack({
+      delta: 1
     })
   },
-  startAnimate() {
+  startAnimate: function () {
     const that = this
     that.setData({
       zoomIn: 'zoomIn'
     })
     setTimeout(function () {
+      _this.initQuestionBank(allQustions);
       that.setData({
         zoomOut: 'zoomOut'
       })
@@ -321,9 +430,7 @@ Page({
   //         })
   //         convertUnitTemp = 0;
   //       }
-
   //       this.data.count++;
-
   //     } else {
   //       clearInterval(this.countTimer);
   //     }
@@ -354,6 +461,48 @@ Page({
   restartTap: function () {
     this.goCountNum(false);
   },
+
+  // progressAnime: function () {
+  //   let that = this
+  //   let interval = ""
+
+  //   that.setData({
+  //     proScoreInterval: interval
+  //   })
+  //   var interval2 = that.data.proScoreInterval;
+  //   that.clearTimeInterval(interval2)
+
+  //   let lastScore = that.data.score_myself_progress
+  //   let theScore = that.data.score_myself - lastScore
+
+  //   var pp = setInterval(function () {
+   
+      
+  //     if (lastScore >= theScore) {
+  //       console.log("销毁了")
+
+  //       var interval = that.data.proScoreInterval;
+  //       that.clearTimeInterval(interval);
+       
+  //       that.setData({
+  //         proScoreInterval: "",
+  //         score_myself_progress: that.data.score_myself
+  //       })
+
+  //       return
+  //     }
+
+  //     lastScore++
+  //     that.setData({
+  //       score_myself_progress: lastScore
+  //     })
+
+  //   }, 100)
+
+  //   that.setData({
+  //     score_myself_progress: pp
+  //   })
+  // },
   /**
  * isRe:是否重新计时
  */
@@ -382,12 +531,18 @@ Page({
           time: time
         })
         convertUnitTemp = 0;
-       
+
       }
       convertUnitTemp++;
 
       if (time == 0) {
         that.clearTimeInterval(that);
+        that.setData({
+          game_over: true,
+          win: true
+        })
+        that.startOtherBgm('erro')
+        that.gameOverContext.play()
       } else if (time == 10) {
         if (that.timeLittleContext != null) {
           that.pauseBgm()
@@ -477,7 +632,6 @@ Page({
     that.readyContext.onError((res) => {
     })
 
-
     that.askContext = wx.createInnerAudioContext()
     that.askContext.autoplay = false //是否自动播放
     that.askContext.loop = false //是否循环播放
@@ -487,7 +641,6 @@ Page({
     that.askContext.onError((res) => {
     })
 
-
     that.gameOverContext = wx.createInnerAudioContext()
     that.gameOverContext.autoplay = false //是否自动播放
     that.gameOverContext.loop = false //是否循环播放
@@ -496,7 +649,6 @@ Page({
     })
     that.gameOverContext.onError((res) => {
     })
-
 
     that.clickContext = wx.createInnerAudioContext()
     that.clickContext.autoplay = false //是否自动播放
@@ -515,7 +667,7 @@ Page({
     if (that.innerAudioContext == null) {
       that.initBgm();
     }
-    if (that.timeLittleContext != null){
+    if (that.timeLittleContext != null) {
       that.timeLittleContext.stop()
     }
     that.innerAudioContext.play()
@@ -574,6 +726,34 @@ Page({
       that.clickContext.stop()
       that.clickContext.destroy()
     }
+  },
+  /**
+   * tap:点击
+   * erro:错误
+   * y:选择正确
+   */
+  startOtherBgm: function (playType) {
+    if (playType == null || playType.length < 1 && that.askContext != null) {
+      return;
+    }
+    var that = this;
+    if (playType == "tap") {
+      that.askContext.src = clickPath
+    } else if (playType == "erro") {
+      that.askContext.src = askErroPath
+    } else if (playType == "y1") {
+      that.askContext.src = yes1Path
+    } else if (playType == "y2") {
+      that.askContext.src = yes2Path
+    } else if (playType == "y3") {
+      that.askContext.src = yes3Path
+    } else if (playType == "y4") {
+      that.askContext.src = yes4Path
+    } else if (playType == "y") {
+      that.askContext.src = yesNPath
+    }
+    that.askContext.play()
+
   },
 
   /**

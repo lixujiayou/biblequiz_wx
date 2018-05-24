@@ -11,13 +11,14 @@
       <text>{{userName}}</text>
 
       <view>评分:\t{{score}}</view>
-      <progress percent="60" style='border-radius: 15rpx;' color="#4090FF" backgroundColor='#AAD0FF' active stroke-width="5" />
+      <progress percent="{{score}}" style='border-radius: 15rpx;' color="#4090FF" backgroundColor='#AAD0FF' active stroke-width="5" />
     </view>
-    <image src='../../imgs/entry_qr.svg' class='qr' bindtap='get_qr_address'></image>
-    <!--注意不要跳转到web_view-->
+     <view>
+    <image src='../../images/entry_qr.svg'  class='qr' bindtap='aboutwe' ></image>
+ </view> 
   </view>
 
-  <view class='choose' bindtap='goAsk'>
+  <view class='choose' style='margin-top: 0rpx;' bindtap='goAsk'>
     <image src='../../images/main_answer.png'></image>
     <view>经典答题</view>
     <view style='margin-top: 44rpx; font-size:26rpx;font-weight: normal; color:#FFE109;'>{{answerHint}}</view>
