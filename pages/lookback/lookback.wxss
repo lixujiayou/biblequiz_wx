@@ -1,3 +1,4 @@
+/* pages/lookback/look back.wxss */
 @import "../../utils/animate.wxss";
 
 page {
@@ -250,5 +251,44 @@ answerarea {
   height: 2rpx; 
   border-radius: 50%;
   background-color: Colorrgba(66,66,66,.6)
+
+}
+
+.page-section{
+  width: 100%;
+  margin-bottom: 60rpx;
+}
+.swiper-item{
+  display: block;
+  height: 150px;
+}
+.page-section_center{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.page-section:last-child{
+  margin-bottom: 0;
+}
+.page-section-gap{
+  box-sizing: border-box;
+  padding: 0 30rpx;
+}
+.page-section-spacing{
+  box-sizing: border-box;
+  padding: 0 80rpx;
+}
+.page-section-title{
+  font-size: 28rpx;
+  color: #999999;
+  margin-bottom: 10rpx;
+  padding-left: 30rpx;
+  padding-right: 30rpx;
+}
+.page-section-gap .page-section-title{
+  padding-left: 0;
+  padding-right: 0;
+}
+.page-section-ctn{
 
 }

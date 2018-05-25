@@ -4,7 +4,8 @@
     "pages/ask/ask",
     "pages/index/index",
     "pages/aboutwe/aboutwe",
-    "pages/timetest/timetest"
+    "pages/timetest/timetest",
+    "pages/lookback/lookback"
   ],
   "window": {
     "backgroundTextStyle": "light",

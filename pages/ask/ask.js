@@ -1,4 +1,3 @@
-
 const util = require('../../utils/util.js')
 var Bmob = require("../../utils/bmob.js");
 /**
@@ -30,6 +29,8 @@ const app = getApp();
 var _this = this;
 var allQustions = new Array;//所有的答题
 var thisQustions = new Array;//本次的答题
+var myChoose = new Array;//记录我的选择
+
 var answerNum = 10;//每次答题个数
 var thisIndex = 0;//当前题目下标
 var disorganizeAnswers = new Array;//本次答题的答案，乱序
@@ -45,7 +46,7 @@ Page({
   data: {
     thisTitle: '',//当前题目
     thisAnswer: '',//当前题目的答案
-    progress_txt: '正在匹配中...',
+
     countdown: countdownNum,//倒计时
 
     answerNo: answerNum,
@@ -70,6 +71,7 @@ Page({
     sendNumber: 0//每一轮的答题次数不能超过1次
   },
   onLoad: function (options) {
+    _this = this;
     this.setData({
       userInfo_icon: wx.getStorageSync('icon'),
     })
@@ -78,7 +80,9 @@ Page({
   },
 
   onReady: function () {
-    _this = this;
+   
+    
+
     //创建并返回绘图上下文context对象。 
     // 页面渲染完成  
     this.drawProgressbg();
@@ -92,7 +96,7 @@ Page({
       duration: 15000
     })
   },
-  fighting_ready() {
+  fighting_ready: function() {
     let that = this;
     that.loadingTap();
     var Diary = Bmob.Object.extend("questionBank");
@@ -137,7 +141,7 @@ Page({
     that.init(that);
     //this.countInterval();
     this.startTap();
-    console.log("重新开始");
+
   },
   initQuestionBank: function (qb) {
     var num;
@@ -148,6 +152,13 @@ Page({
     } else {
       thisQustions = new Array;
     }
+    //清空数组
+    if (myChoose != null) {
+      myChoose.splice(0, thisQustions.length);
+    } else {
+      myChoose = new Array;
+    }
+
 
 
     if (qb != null && qb.length != 0) {
@@ -205,12 +216,18 @@ Page({
 
       disorganizeAnswers[i] = currentAnswers[num];
     }
-    console.log("=====");
-
+ 
+ 
     this.setData({
       thisTitle: thisQustions[thisIndex].get('topic'),
+      mytitle: 'lightSpeedIn-left', //标题动画
       thisAnswer: disorganizeAnswers
     })
+    // setTimeout(function () {
+    //   _this.setData({
+    //     titleZoomOut: 'zoomOut'
+    //   })
+    // }, 1000)
   },
 
 
@@ -229,6 +246,8 @@ Page({
     if (!that.data.local_click) {  //防止重新选择答案
       var mS = disorganizeAnswers[e.currentTarget.dataset.index];//我的选择
       var successAsk = thisQustions[thisIndex].get('answers')[0];//正确选项
+
+      myChoose[myChoose.length] = mS
       if (mS == successAsk) {//判断答案是否正确
         that.data.continuousYes++
 
@@ -278,6 +297,7 @@ Page({
           click_index: e.currentTarget.dataset.index,
           answer_color: 'right'
         })
+
         //答对了则加分，时间越少加分越多,总分累加
         that.countScore()
 
@@ -304,14 +324,14 @@ Page({
           continuousYes: 0
         })
 
-        // for (var i = 0; i < disorganizeAnswers.length;i++ ){
-        //   if (disorganizeAnswers[i] == successAsk){
-        //     that.setData({
-        //       click_index: i,
-        //       answer_color: 'right'
-        //     })
-        //   }
-        // }
+        for (var i = 0; i < disorganizeAnswers.length;i++ ){
+          if (disorganizeAnswers[i] == successAsk){
+            that.setData({
+              rightChoose: i,
+              rightChooseColor: 'right'
+            })
+          }
+        }
 
         that.startOtherBgm('erro')
         that.setData({
@@ -330,13 +350,17 @@ Page({
       }
      // that.progressAnime() 
     
+    
       thisIndex += 1
+      if (thisIndex < answerNum){
       that.setData({
         thisIndex: thisIndex
       })
     }
-    that.clearTimeInterval(that);
 
+
+    }
+    that.clearTimeInterval(that);
   },
   /**
    * 计算得分
@@ -362,20 +386,32 @@ Page({
     })
     console.log("得分" + theScore);
   },
-  continue_fighting() {
+  continue_fighting :function() {
     wx.navigateBack({
       delta: 1
+    }) 
+  },
+  lookback:function(){
+   let answers = JSON.stringify(thisQustions)
+    wx.redirectTo({
+      url: '../lookback/lookback?id=1&alist=' + answers + '&clist=' + myChoose
     })
   },
   startAnimate: function () {
     const that = this
+    if (that.readyContext == null){
+      console.log("==s==" + that.readyContex);
+    }else{
+      console.log("====" + that.readyContex);
+    }
+    that.readyContext.play()
     that.setData({
       zoomIn: 'zoomIn'
     })
     setTimeout(function () {
       _this.initQuestionBank(allQustions);
       that.setData({
-        zoomOut: 'zoomOut'
+        zoomOut: 'zoomOut' 
       })
     }, 1500)
   },
@@ -449,7 +485,7 @@ Page({
   */
   stopTap: function () {
     var that = this;
-    console.log("记住倒计时" + that.data.time);
+   
     that.setData({
       lastNum: that.data.time
     })
@@ -514,7 +550,7 @@ Page({
     var time = countdownNum;
     if (that.data.lastNum != null && that.data.lastNum != 0 && !isRe) {
       time = that.data.lastNum;
-      console.log("重新倒计时==" + time);
+
       time--
     }
 
@@ -572,17 +608,13 @@ Page({
     })
   },
   onShareAppMessage: function (res) {
-    const that = this;
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
     return {
-      title: '扎根于圣经,建基于祷告.',
-      path: '/pages/entry/entry?currentClickId=' + app.appData.currentClickId,
-      success: function (res) {
-        //转发时向用户关系表中更新一条转发记录(个人为person，群为GId)。
-        require('../../utils/upDateShareInfoToUser_network.js').upDateShareInfoToUser_network(app, that, res)
-        wx.redirectTo({
-          url: '../entry/entry'
-        })
-      }
+      title: '今天的读经你记住了吗？',
+      path: '/pages/main/main'
     }
   },
   /**
@@ -594,7 +626,7 @@ Page({
     clearInterval(interval)
   },
   initBgm: function () {
-    var that = this;
+    var that = this; 
     console.log("初始化音频");
     that.innerAudioContext = wx.createInnerAudioContext()
     that.innerAudioContext.autoplay = false //是否自动播放
@@ -624,7 +656,7 @@ Page({
     })
 
     that.readyContext = wx.createInnerAudioContext()
-    that.readyContext.autoplay = true //是否自动播放
+    that.readyContext.autoplay = false //是否自动播放
     that.readyContext.loop = false //是否循环播放
     that.readyContext.src = readyPath
     that.readyContext.onPlay(() => {
@@ -687,10 +719,12 @@ Page({
   * 在后台运行时停止计时器
  */
   onHide: function () {
+
     this.pauseBgm();
     this.stopTap();
   },
   onShow: function () {
+  
     var that = this;
     if (that.innerAudioContext == null) {
       that.initBgm()
@@ -763,8 +797,11 @@ Page({
   onUnload: function () {
     var that = this;
     //  clearInterval(this.countTimer);
+    thisIndex = 0;
+    that.setData({
+      thisIndex:0
+    })
     that.clearTimeInterval(that);
     that.closeBgm();
-
   }
 })

@@ -1,13 +1,13 @@
 <!--pages/main/main.wxml-->
 <view class='container'>
-
-  <view class='person-infor'>
-    <image class='bg' src='../../images/main_bg.jpg'></image>
+ 
+  <view class='person-infor animated '>
+    <image class='bg ' src='../../images/main_bg.jpg'></image>
     <view>
-      <image src='{{userImg}}' class='avatarUrl'></image>
+      <image src='{{userImg}}' class='avatarUrl '></image>
     </view>
 
-    <view class='userInfo'>
+    <view class='userInfo '>
       <text>{{userName}}</text>
 
       <view>评分:\t{{score}}</view>
@@ -31,7 +31,7 @@
       <view>关于我们</view>
     </view>
 
-    <view class='flex-wrp' style='width: 20rpx;'></view>
+    <view class='flex-wrp ' style='width: 20rpx;'></view>
 
     <view class='chooseone' bindtap='moreContent' >
       <image src='../../images/main_more.png'></image>

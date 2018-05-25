@@ -1,0 +1,28 @@
+<view class='header'>
+
+
+  <view class="page-section page-section-spacing swiper">
+      <swiper>
+        <block wx:for="{{thisQustions}}" wx:key="*this">
+          <swiper-item>
+             
+          <view class='answerarea '  style='width:80%; '>
+      <view wx:for="{{item}}" data-index="{{index}}" data-right="{{item.right}}" class="{{index==click_index&&click_index!=='' ? answer_color : ''}}  {{index==rightChoose&&rightChoose!=='' ? rightChooseColor : ''}} answer ">
+      
+         <view class="invisible {{index==click_index&&click_index!==''&&answer_color=='right' ? 'sign' : ''}}">○</view>
+        <view class="invisible {{index==click_index&&click_index!==''&&answer_color=='error' ? 'sign' : ''}}">×</view>
+        <view style='width:100%;'>{{item}}</view>
+        <view class="invisible {{index==rightChoose && rightChoose!==''&&rightChooseColor=='right' ? 'sign' : ''}}" style='left: 88%;'>○</view>
+        <view class="invisible {{index==rightChoose && rightChoose!==''&&rightChooseColor=='error' ? 'sign' : ''}}" style='left: 88%;'>×</view> 
+      </view>
+    </view>
+
+
+          </swiper-item>
+        </block> 
+
+      </swiper>
+    </view> 
+
+
+</view>

@@ -128,3 +128,64 @@ page {
   height: 320rpx;
   border-radius: 10rpx;
 }
+.animated_zoomIn {
+  animation-duration: 1.5s;
+}
+.animated {
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+}
+
+.lightSpeedIn-left {
+  animation-name: lightSpeedIn-left;
+  animation-timing-function: ease-out;
+}
+
+@keyframes lightSpeedIn-left {
+  from {
+    transform: translate3d(-600%, 0, 0) skewX(-15deg);
+    opacity: 0;
+  }
+
+  60% {
+    transform: skewX(15deg);
+    opacity: 1;
+  }
+
+  80% {
+    transform: skewX(-5deg);
+    opacity: 1;
+  }
+
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.lightSpeedIn-right {
+  animation-name: lightSpeedIn-right;
+  animation-timing-function: ease-out;
+}
+
+@keyframes lightSpeedIn-right {
+  from {
+    transform: translate3d(600%, 0, 0) skewX(15deg);
+    opacity: 0;
+  }
+
+  60% {
+    transform: skewX(-15deg);
+    opacity: 1;
+  }
+
+  80% {
+    transform: skewX(5deg);
+    opacity: 1;
+  }
+
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
