@@ -80,8 +80,8 @@ Page({
   },
 
   onReady: function () {
-   
-    
+
+
 
     //创建并返回绘图上下文context对象。 
     // 页面渲染完成  
@@ -96,7 +96,7 @@ Page({
       duration: 15000
     })
   },
-  fighting_ready: function() {
+  fighting_ready: function () {
     let that = this;
     that.loadingTap();
     var Diary = Bmob.Object.extend("questionBank");
@@ -216,8 +216,8 @@ Page({
 
       disorganizeAnswers[i] = currentAnswers[num];
     }
- 
- 
+
+
     this.setData({
       thisTitle: thisQustions[thisIndex].get('topic'),
       mytitle: 'lightSpeedIn-left', //标题动画
@@ -240,7 +240,7 @@ Page({
     }
     this.stopTap();
 
-   
+
 
     that.startOtherBgm('tap')
     if (!that.data.local_click) {  //防止重新选择答案
@@ -324,8 +324,8 @@ Page({
           continuousYes: 0
         })
 
-        for (var i = 0; i < disorganizeAnswers.length;i++ ){
-          if (disorganizeAnswers[i] == successAsk){
+        for (var i = 0; i < disorganizeAnswers.length; i++) {
+          if (disorganizeAnswers[i] == successAsk) {
             that.setData({
               rightChoose: i,
               rightChooseColor: 'right'
@@ -340,23 +340,23 @@ Page({
 
         setTimeout(function () {
           that.gameOverContext.play()
-          that.pauseBgm(); 
-          that.stopTap(); 
+          that.pauseBgm();
+          that.stopTap();
           that.setData({
             game_over: true,
             win: true
           })
         }, 1500)
       }
-     // that.progressAnime() 
-    
-    
+      // that.progressAnime() 
+
+
       thisIndex += 1
-      if (thisIndex < answerNum){
-      that.setData({
-        thisIndex: thisIndex
-      })
-    }
+      if (thisIndex < answerNum) {
+        that.setData({
+          thisIndex: thisIndex
+        })
+      }
 
 
     }
@@ -386,22 +386,25 @@ Page({
     })
     console.log("得分" + theScore);
   },
-  continue_fighting :function() {
+  continue_fighting: function () {
     wx.navigateBack({
       delta: 1
-    }) 
-  },
-  lookback:function(){
-   let answers = JSON.stringify(thisQustions)
-    wx.redirectTo({
-      url: '../lookback/lookback?id=1&alist=' + answers + '&clist=' + myChoose
     })
+  },
+  lookback: function () {
+   
+    let answers = JSON.stringify(thisQustions)
+    let choose = JSON.stringify(myChoose)
+    wx.navigateTo({
+      url: '../lookback/lookback?id=1&alist=' + answers + '&clist=' + choose
+    })
+
   },
   startAnimate: function () {
     const that = this
-    if (that.readyContext == null){
+    if (that.readyContext == null) {
       console.log("==s==" + that.readyContex);
-    }else{
+    } else {
       console.log("====" + that.readyContex);
     }
     that.readyContext.play()
@@ -411,7 +414,7 @@ Page({
     setTimeout(function () {
       _this.initQuestionBank(allQustions);
       that.setData({
-        zoomOut: 'zoomOut' 
+        zoomOut: 'zoomOut'
       })
     }, 1500)
   },
@@ -485,7 +488,7 @@ Page({
   */
   stopTap: function () {
     var that = this;
-   
+
     that.setData({
       lastNum: that.data.time
     })
@@ -512,14 +515,14 @@ Page({
   //   let theScore = that.data.score_myself - lastScore
 
   //   var pp = setInterval(function () {
-   
-      
+
+
   //     if (lastScore >= theScore) {
   //       console.log("销毁了")
 
   //       var interval = that.data.proScoreInterval;
   //       that.clearTimeInterval(interval);
-       
+
   //       that.setData({
   //         proScoreInterval: "",
   //         score_myself_progress: that.data.score_myself
@@ -626,9 +629,9 @@ Page({
     clearInterval(interval)
   },
   initBgm: function () {
-    var that = this; 
+    var that = this;
     console.log("初始化音频");
-    that.innerAudioContext = wx.createInnerAudioContext()
+    that.innerAudioContext = wx.createInnerAudioContext();
     that.innerAudioContext.autoplay = false //是否自动播放
     that.innerAudioContext.loop = true //是否循环播放
     that.innerAudioContext.src = mainBgmPath
@@ -724,7 +727,7 @@ Page({
     this.stopTap();
   },
   onShow: function () {
-  
+
     var that = this;
     if (that.innerAudioContext == null) {
       that.initBgm()
@@ -799,7 +802,7 @@ Page({
     //  clearInterval(this.countTimer);
     thisIndex = 0;
     that.setData({
-      thisIndex:0
+      thisIndex: 0
     })
     that.clearTimeInterval(that);
     that.closeBgm();

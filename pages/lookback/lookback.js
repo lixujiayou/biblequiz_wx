@@ -11,6 +11,9 @@ Page({
    */
   data: {
     thisQustions: '',
+    myChoose:'',
+    answer_color: '',
+    rightChooseColor:''
   },
 
   /**
@@ -19,19 +22,13 @@ Page({
   onLoad: function (options) {
     that = this
     thisQustions =  JSON.parse(options.alist);
+    myChoose = JSON.parse(options.clist);
     console.log(options.clist + "=====" + options.alist)
     that.setData({
-      thisQustions: thisQustions
+      thisQustions: thisQustions,
+      myChoose: myChoose
     })
 
-    // thisQustions = new Array
-    // thisQustions[0] = "测试1211213"
-    // thisQustions[1]="啊啊啊啊"
-    // thisQustions[2] = "sssssss"
-    // console.log("=====" + thisQustions)
-    // that.setData({
-    //   thisQustions: thisQustions
-    // })
   },
 
   /**

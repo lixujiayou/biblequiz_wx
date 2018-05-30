@@ -11,7 +11,8 @@ answerarea {
 
   background-attachment: fixed;
   color: white;
-  background: ur('');
+
+  align-items: center;
 }
 
 .header {
@@ -116,8 +117,8 @@ answerarea {
   color: #3883fa;
   background: #fff;
   border-radius: 20rpx;
-  height: 100rpx;
-  line-height: 100rpx;
+  height: 80rpx;
+  line-height: 80rpx;
   margin: 40rpx 0;
   position: relative;
 }
@@ -256,11 +257,13 @@ answerarea {
 
 .page-section{
   width: 100%;
+  align-items: center;
   margin-bottom: 60rpx;
 }
+
 .swiper-item{
   display: block;
-  height: 150px;
+align-items: center;
 }
 .page-section_center{
   display: flex;
@@ -277,6 +280,7 @@ answerarea {
 .page-section-spacing{
   box-sizing: border-box;
   padding: 0 80rpx;
+  
 }
 .page-section-title{
   font-size: 28rpx;
