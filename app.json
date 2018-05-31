@@ -5,7 +5,8 @@
     "pages/index/index",
     "pages/aboutwe/aboutwe",
     "pages/timetest/timetest",
-    "pages/lookback/lookback"
+    "pages/lookback/lookback",
+    "pages/ranklist/ranklist"
   ],
   "window": {
     "backgroundTextStyle": "light",

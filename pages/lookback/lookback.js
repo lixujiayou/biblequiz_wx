@@ -5,7 +5,6 @@ var thisQustions = new Array;//本次的答题
 var myChoose = new Array;//记录我的选择
 var that;
 Page({
-  
   /**
    * 页面的初始数据
    */
@@ -13,7 +12,8 @@ Page({
     thisQustions: '',
     myChoose:'',
     answer_color: '',
-    rightChooseColor:''
+    rightChooseColor:'',
+    currentPage:1
   },
 
   /**
@@ -21,8 +21,14 @@ Page({
    */
   onLoad: function (options) {
     that = this
-    thisQustions =  JSON.parse(options.alist);
+    let tempList =  JSON.parse(options.alist);
     myChoose = JSON.parse(options.clist);
+
+    for (var i = 0; i < myChoose.length; i++){
+      thisQustions[i] = tempList[i]
+    }
+
+
     console.log(options.clist + "=====" + options.alist)
     that.setData({
       thisQustions: thisQustions,
@@ -30,7 +36,13 @@ Page({
     })
 
   },
-
+  listenSwiper: function (e) {
+    //打印信息
+   // console.log(e.detail.current)
+    that.setData({
+      currentPage: e.detail.current + 1
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

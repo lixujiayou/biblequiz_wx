@@ -1,33 +1,54 @@
-<view class='header' style='width: 100%;height: 100%;display: flex;align-items: center;'>
+<view class='header'>
 
+  <view class='progress_box' style='width:100%; justify-content: center;'  >
+  <text class='head_text'>{{currentPage}}/{{thisQustions.length}}</text>
+</view>
+</view>
+
+
+<view class='body'>
+  <view class='content '>
+    <view>
+   
+      <view class='process'>
+        <view class='process_son' style='height: {{score_myself}}%;'></view>
+      </view>
+ </view>
+
+ 
 
   <view class="page-section page-section-spacing swiper">
-
-    <swiper style="height:650rpx ">
-
+    <swiper style="height:950rpx; " bindchange="listenSwiper">
       <block wx:for="{{thisQustions}}" wx:key="*this">
         <swiper-item>
 
-          <view class='answerarea ' style='width:80%; '>
-          <text>{{item.topic}}</text>
+          <view class='answerarea ' style='width:100%; '>
+        
+          <text  >{{item.topic}}</text>
 
-            <view wx:for="{{item.answers}}" data-index="{{index}}"  class="{{index == 0  ? 'right':'' }}  answer ">
-
-              <view class="invisible {{index == 0}}" >○</view>
-              <!-- <view class="invisible {{index==click_index&&click_index!==''&&answer_color=='error' ? 'sign' : ''}}">×</view> -->
-              
+            <view wx:for="{{item.answers}}" data-index="{{index}}"  class="{{index == 0  ? 'right':'' }}  answer " >
               <view style='width:100%;'>{{item}}</view>
-
-
             </view>
+  <view >参考：{{item.hint}}</view>
           </view>
-
-
         </swiper-item>
       </block>
-
     </swiper>
   </view>
 
-
+<view>
+      <view class='process'>
+        <view class='process_son' ></view>
+      </view>
+    </view>
+  </view>
 </view>
+
+ <!--<view>
+       <view class='process' style='margin-right:80rpx;'>
+        <view class='process_son' style='height: {{(thisIndex + 1) * 10}}%;'></view>
+      </view> 
+    </view>-->
+
+
+<!-- </view> -->

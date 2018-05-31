@@ -1,0 +1,43 @@
+<view class='header'>
+
+  <view class="p20 ">
+    <view class="user-con-box ">
+ 
+      <view class="p20 person-infor">
+
+          <image src='https://wx.qlogo.cn/mmopen/vi_32/CJPlLwB8XiaXUsToG8bmRkDRlNZExoaHQbRzKwnGibjtxY6F0PNQeg3zKOunbicicFSDPzn1g13bsE15I7IAxaJfwg/0' class='avatarUrl '></image>
+   
+
+<view class='userInfo '>
+      <text>李玉杰{{}}</text>
+          <view class='qr'></view>
+      <view>评分:\t{{score}}</view>
+    </view>
+     <view>
+ </view> 
+      </view>
+    </view>
+  </view>
+
+      <view wx:for="{{ranklist}}" data-index="{{index}}" class="{{index == 0  ? 'right':'' }}  answer ">
+
+  <view class="p20 ">
+    <view class="user-con-box ">
+ 
+      <view class="p20 person-infor">
+
+          <image src='{{item.userPic != undefined ? item.userPic : "../../images/icon_default.png"}}' class='avatarUrl '></image>
+<view class='userInfo '>
+      <text>{{item.nickName}}</text>
+      <view>评分:\t{{item.mscore}}</view>
+
+    </view>
+     <view>
+ </view> 
+      </view>
+    </view>
+  </view>
+    </view>
+
+
+</view>

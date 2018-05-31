@@ -31,7 +31,7 @@ var allQustions = new Array;//所有的答题
 var thisQustions = new Array;//本次的答题
 var myChoose = new Array;//记录我的选择
 
-var answerNum = 10;//每次答题个数
+var answerNum = 3;//每次答题个数
 var thisIndex = 0;//当前题目下标
 var disorganizeAnswers = new Array;//本次答题的答案，乱序
 var countdownNum = 20;//倒计时
@@ -80,50 +80,62 @@ Page({
   },
 
   onReady: function () {
-
-
-
     //创建并返回绘图上下文context对象。 
     // 页面渲染完成  
     this.drawProgressbg();
-
-
   },
   loadingTap: function () {
     wx.showToast({
       title: "",
       icon: "loading",
-      duration: 15000
+      duration: 5000
     })
   },
   fighting_ready: function () {
     let that = this;
     that.loadingTap();
-    var Diary = Bmob.Object.extend("questionBank");
-    var query = new Bmob.Query(Diary);
-    // 查询所有数据
-    query.find({
-      success: function (results) {
-        wx.hideToast()
-        console.log("共查询到 " + results.length + " 条记录");
 
-        allQustions = results;
-        that.startAnimate();//定义开始动画
+    wx.getStorage({
+      key: 'ask_type',
+      success: function (res) {
+        console.log(res.data)
+
+ 
+        var Diary = Bmob.Object.extend("questionBank");
+        var query = new Bmob.Query(Diary);
+        // 查询所有数据
+        query.equalTo("type", res.data);
+        query.find({
+          success: function (results) {
+            wx.hideToast()
+            console.log("共查询到 " + results.length + " 条记录");
+
+            allQustions = results;
+            that.startAnimate();//定义开始动画
 
 
-      },
-      error: function (error) {
-        wx.hideToast()
-        wx.showToast({
-          title: "抱歉，系统错误，请重试(" + error.code + " " + error.message + ")",
-          icon: "none",
-        })
-        wx.navigateBack({
-          delta: 1
-        })
-        console.log("查询失败: " + error.code + " " + error.message);
+          },
+          error: function (error) {
+            wx.hideToast()
+            wx.showToast({
+              title: "抱歉，系统错误，请重试(" + error.code + " " + error.message + ")",
+              icon: "none",
+            })
+            wx.navigateBack({
+              delta: 1
+            })
+            console.log("查询失败: " + error.code + " " + error.message);
+          }
+        });
+
+
       }
-    });
+    })
+
+
+
+
+
   },
   restAnswer: function () {
     this.data.count = 0;
@@ -310,6 +322,29 @@ Page({
               game_over: true,
               win: true
             })
+
+            wx.getStorage({
+              key: 'objid',
+              success: function (res) {
+              var Diary = Bmob.Object.extend("User");
+              var query = new Bmob.Query(Diary);
+              query.get(res.data, {
+                success: function (result) {
+                  console.log(result.get("mscore")+"返回"+result.id)
+                  let mmcore = (that.data.score_myself + result.get("mscore"))/2
+                  mmcore = Math.floor(mmcore * 100) / 100; // 取小数点后两位
+                  console.log("结算传送=(" + result.get("mscore") + "+" + that.data.score_myself +")/2=="+ mmcore)
+                  result.set('mscore', mmcore)
+                  result.save();
+                },
+                error: function (object, error) {
+                }
+              });
+            }
+          })
+
+
+
           } else {
             _this.initThisAnswer();
           }
@@ -337,6 +372,26 @@ Page({
         that.setData({
           score_myself: 0
         })
+
+
+        wx.getStorage({
+          key: 'objid',
+          success: function (res) {
+            var Diary = Bmob.Object.extend("User");
+            var query = new Bmob.Query(Diary);
+            query.get(res.data, {
+              success: function (result) {
+                result.set('mscore', 0)
+                result.save();
+              },
+              error: function (object, error) {
+              }
+            });
+          }
+        })
+
+
+
 
         setTimeout(function () {
           that.gameOverContext.play()
@@ -369,8 +424,6 @@ Page({
     let that = this;
     let theScore;
 
-    console.log("==" + that.data.time);
-
     if (that.data.time >= 16) {
       theScore = 10
     } else if (that.data.time >= 13) {
@@ -384,7 +437,7 @@ Page({
     that.setData({
       score_myself: theScore
     })
-    console.log("得分" + theScore);
+    
   },
   continue_fighting: function () {
     wx.navigateBack({
@@ -392,21 +445,16 @@ Page({
     })
   },
   lookback: function () {
-   
+
     let answers = JSON.stringify(thisQustions)
     let choose = JSON.stringify(myChoose)
     wx.navigateTo({
       url: '../lookback/lookback?id=1&alist=' + answers + '&clist=' + choose
     })
-
   },
   startAnimate: function () {
     const that = this
-    if (that.readyContext == null) {
-      console.log("==s==" + that.readyContex);
-    } else {
-      console.log("====" + that.readyContex);
-    }
+   
     that.readyContext.play()
     that.setData({
       zoomIn: 'zoomIn'

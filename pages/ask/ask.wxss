@@ -119,6 +119,7 @@ answerarea {
   line-height: 100rpx;
   margin: 40rpx 0;
   position: relative;
+   box-shadow: 0 0 10px rgba(212, 228, 240, 1);
 }
 
 .answer view {
@@ -202,7 +203,7 @@ answerarea {
   height: 80rpx;
   line-height: 80rpx;
   background: #fff;
-
+ box-shadow: 0 0 10px rgba(212, 228, 240, 1)
 } 
 
 

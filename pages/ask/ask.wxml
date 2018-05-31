@@ -18,6 +18,8 @@
   <image src="../../images/{{win ? 'PK_success' : 'PK_fail'}}.svg" style='width:300rpx;height:300rpx;'></image>
 </view>
 
+
+
 <view class='body'  wx:if="{{game_over ? false : true}}">
   <view class='animated animated_zoomIn {{zoomIn}} {{zoomOut}}' wx:if="{{thisTitle ? false : true}}">
     <image src='../../images/VS.svg' style='width:600rpx;height:600rpx;'></image> 

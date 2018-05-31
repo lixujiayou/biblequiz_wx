@@ -19,7 +19,6 @@ answerarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 60rpx;
   font-size: 32rpx;
 }
 
@@ -100,8 +99,8 @@ answerarea {
 }
 
 .body .title {
-  width: 80%;
-  margin: 80rpx auto;
+   width: 80%;
+  margin: 80rpx auto; 
 }
 
 .body .content {
@@ -117,9 +116,10 @@ answerarea {
   color: #3883fa;
   background: #fff;
   border-radius: 20rpx;
-  height: 80rpx;
-  line-height: 80rpx;
-  margin: 40rpx 0;
+  height: 70rpx;
+  line-height: 70rpx;
+  margin: 40rpx 40rpx;
+
   position: relative;
 }
 
@@ -159,7 +159,8 @@ answerarea {
   border-radius: 20rpx;
   background: #416FDB;
   transform: rotate(-180deg);
-  margin: 0 20rpx;
+  margin: 0 50rpx;
+ 
 } 
  
 .process_son {
@@ -227,6 +228,11 @@ answerarea {
   align-items: center;
   justify-content: center;
 }
+.head_text{
+   font-weight: bold;
+  font-size:75rpx;
+   color:#F17B2E;
+}
 .progress_bg{
   position: absolute;
     width:90px;
@@ -279,8 +285,6 @@ align-items: center;
 }
 .page-section-spacing{
   box-sizing: border-box;
-  padding: 0 80rpx;
-  
 }
 .page-section-title{
   font-size: 28rpx;
