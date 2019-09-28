@@ -1,43 +1,61 @@
 <view class='header'>
+  <view class='container'>
 
-  <view class="p20 ">
-    <view class="user-con-box ">
- 
-      <view class="p20 person-infor">
-
-          <image src='https://wx.qlogo.cn/mmopen/vi_32/CJPlLwB8XiaXUsToG8bmRkDRlNZExoaHQbRzKwnGibjtxY6F0PNQeg3zKOunbicicFSDPzn1g13bsE15I7IAxaJfwg/0' class='avatarUrl '></image>
-   
-
-<view class='userInfo '>
-      <text>李玉杰{{}}</text>
-          <view class='qr'></view>
-      <view>评分:\t{{score}}</view>
-    </view>
-     <view>
- </view> 
-      </view>
+    <view class='person-infor '>
+      <image class='bg ' src='../../images/icon_rank_head.png'></image>
     </view>
   </view>
 
-      <view wx:for="{{ranklist}}" data-index="{{index}}" class="{{index == 0  ? 'right':'' }}  answer ">
-
-  <view class="p20 ">
-    <view class="user-con-box ">
- 
-      <view class="p20 person-infor">
-
-          <image src='{{item.userPic != undefined ? item.userPic : "../../images/icon_default.png"}}' class='avatarUrl '></image>
-<view class='userInfo '>
-      <text>{{item.nickName}}</text>
-      <view>评分:\t{{item.mscore}}</view>
-
-    </view>
-     <view>
- </view> 
-      </view>
+  <view>
+    <view class='process'>
+      <view class='process_son'></view>
     </view>
   </view>
+
+  <view>
+    <scroll-view scroll-y="true" style="margin-top:-4px; height: {{scroHeight}}px; " bindscrolltoupper="upper" bindscrolltolower="lower" bindscroll="scroll" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+      <view wx:for="{{ranklist}}" data-index="{{index}}">
+
+        <view class="p20 ">
+          <view class="user-con-box ">
+            <text style='color:white; padding-left: 6px;padding-right: 4px; position:absolute;'> {{index + 1}}</text>
+            
+            <view class="p20 person-infor">
+              <image src='{{item.userPic != undefined ? item.userPic : "../../images/icon_default.png"}}' class='avatarUrl '></image>
+
+              <view class='userInfo '>
+                <text>{{item.nickName?item.nickName:"圣经问答用户"}}</text>
+                <view>{{item.mscore?item.mscore:'0'}}</view>
+              </view>
+              <view>
+
+                
+              </view>
+               <view class='userInfo_2' >
+                <text >{{item.location?item.location:"UNKNOWN"}}</text>
+                <view>{{item.a_number?item.a_number:"0"}} 次</view>
+              </view>
+           
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+  <view>
+    <view class='process'>
+      <view class='process_son'></view>
+    </view>
+  </view>
+
+
+  <view class='person-infor ' style='position:absolute; bottom:0;  '>
+    <image class='bg ' src='../../images/icon_rank_bottome_bg.png'></image>
+
+
+    <view style=' left: 0%;  top: 0%; margin:4px 20px'>
+      <text style='margin-top:40px;color:white; font-size:12px;'>{{isMe?'不错哟,评分榜第'+isMe+'名。【腓3:13-14】弟兄们,我不是以为自己已经得着了;我只有一件事,就是忘记背后,努力面前的,向着标竿直跑,要得神在基督耶稣里从上面召我来得的奖赏.':'榜上无名。【书1:8】这律法书不可离开你的口，总要昼夜思想，好使你谨守遵行这书上所写的一切话。如此，你的道路就可以亨通，凡事顺利。'}}</text>
     </view>
 
-
+  </view>
 </view>

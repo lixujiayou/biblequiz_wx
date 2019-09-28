@@ -1,16 +1,28 @@
 {
 	"description": "项目配置文件。",
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true
+		"newFeature": true,
+		"coverView": true,
+		"autoAudits": false,
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		}
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.0.8",
+	"libVersion": "2.8.3",
 	"appid": "wx116bb648d30156d2",
 	"projectname": "bibleAsk1",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -50,16 +62,16 @@
 					"query": ""
 				},
 				{
-					"id": -1,
-					"name": "111",
-					"pathName": "pages/timetest/timetest",
+					"id": 3,
+					"name": "aboutwe",
+					"pathName": "pages/aboutwe/aboutwe",
 					"query": ""
 				},
 				{
 					"id": 4,
 					"name": "答题回顾",
 					"pathName": "pages/lookback/lookback",
-					"query": "clist=[\"以革伦\",\"亚扪人\"]&alist=[{\"hint\":\"士19：10\",\"topic\":\"耶路撒冷又名？\",\"type\":\"士\",\"answers\":[\"耶不斯\",\"耶路撒\",\"以革伦\",\"基比亚\"],\"objectId\":\"2bJ4NBBG\",\"createdAt\":\"2018-05-24 21:41:20\",\"updatedAt\":\"2018-05-24 21:41:49\"},{\"hint\":\"士15：11-13\",\"topic\":\"什么人用绳子捆绑参孙？\",\"type\":\"士\",\"answers\":[\"犹大人\",\"非利士人\",\"摩押人\",\"亚扪人\"],\"objectId\":\"d0oBSGGK\",\"createdAt\":\"2018-05-24 21:31:29\",\"updatedAt\":\"2018-05-24 21:32:03\"},{\"hint\":\"士16：31\",\"topic\":\"参孙死后葬在哪里？\",\"type\":\"士\",\"answers\":[\"他父亲玛挪亚的坟墓里\",\"锁拉\",\"以实陶\",\"非利士\"],\"objectId\":\"BnKXt00a\",\"createdAt\":\"2018-05-24 21:38:17\",\"updatedAt\":\"2018-05-24 21:38:52\"},{\"hint\":\"士14:8\",\"topic\":\"圣经中记载参孙吃了哪里的蜜？\",\"type\":\"士\",\"answers\":[\"死狮内\",\"蜂巢\",\"非利士女子送的\",\"花丛\"],\"objectId\":\"TntvTMMQ\",\"createdAt\":\"2018-05-24 21:28:23\",\"updatedAt\":\"2018-05-24 21:30:40\"},{\"hint\":\"士2：8，士2：16\",\"topic\":\"约书亚死后，以色列进入什么时代？\",\"type\":\"士\",\"answers\":[\"士师\",\"统一王国\",\"王国分裂\",\"旷野\"],\"objectId\":\"k8acIIIg\",\"createdAt\":\"2018-04-09 10:37:54\",\"updatedAt\":\"2018-05-24 21:09:47\"},{\"hint\":\"士3：11，士3：30\",\"topic\":\"神兴起士师‘俄陀聂’和‘以笏’后分别国中太平多少年？\",\"type\":\"士\",\"answers\":[\"40 80\",\"20 40\",\"80 30\",\"10 40\"],\"objectId\":\"pvZaBBBJ\",\"createdAt\":\"2018-04-09 10:38:32\",\"updatedAt\":\"2018-05-24 21:09:46\"},{\"hint\":\"士21：1\",\"topic\":\"什么人起誓不将女儿给便雅悯人为妻？\",\"type\":\"士\",\"answers\":[\"以色列\",\"摩押\",\"亚扪\",\"非利士\"],\"objectId\":\"SWwk9VVj\",\"createdAt\":\"2018-05-24 21:43:30\",\"updatedAt\":\"2018-05-24 21:43:57\"},{\"hint\":\"士13：25\",\"topic\":\"耶和华的灵在哪里感动参孙？\",\"type\":\"士\",\"answers\":[\"玛哈尼但\",\"琐拉\",\"以实陶\",\"以坦\"],\"objectId\":\"NCdIMEEM\",\"createdAt\":\"2018-05-24 21:25:50\",\"updatedAt\":\"2018-05-24 21:26:22\"},{\"hint\":\"士6：36-40\",\"topic\":\"士师基甸向神求的什么印证？\",\"type\":\"士\",\"answers\":[\"羊毛印证\",\"日头停留 月亮止住\",\"一人必追赶千人\",\"军中无一人伤亡\"],\"objectId\":\"XhyWPPPT\",\"createdAt\":\"2018-05-24 21:11:57\",\"updatedAt\":\"2018-05-24 21:12:36\"},{\"hint\":\"创11:20\",\"topic\":\"拉吴多少岁生的西鹿？\",\"type\":\"士\",\"answers\":[\"32岁\",\"30岁\",\"33岁\",\"35岁\"],\"objectId\":\"Jb5nAAAE\",\"createdAt\":\"2018-04-08 17:09:55\",\"updatedAt\":\"2018-05-24 21:09:49\"}]"
+					"query": "clist=[\"以革伦\",\"犹大人\",\"嗯哼\"]&alist=[{\"hint\":\"士19：10\",\"topic\":\"耶路撒冷又名？\",\"type\":\"士\",\"answers\":[\"耶不斯\",\"耶路撒\",\"以革伦\",\"基比亚\"],\"objectId\":\"2bJ4NBBG\",\"createdAt\":\"2018-05-24 21:41:20\",\"updatedAt\":\"2018-05-24 21:41:49\"},{\"hint\":\"士15：11-13\",\"topic\":\"什么人用绳子捆绑参孙？\",\"type\":\"士\",\"answers\":[\"犹大人\",\"非利士人\",\"摩押人\",\"亚扪人\"],\"objectId\":\"d0oBSGGK\",\"createdAt\":\"2018-05-24 21:31:29\",\"updatedAt\":\"2018-05-24 21:32:03\"},{\"hint\":\"士16：31\",\"topic\":\"参孙死后葬在哪里？\",\"type\":\"士\",\"answers\":[\"他父亲玛挪亚的坟墓里\",\"锁拉\",\"以实陶\",\"非利士\"],\"objectId\":\"BnKXt00a\",\"createdAt\":\"2018-05-24 21:38:17\",\"updatedAt\":\"2018-05-24 21:38:52\"},{\"hint\":\"士14:8\",\"topic\":\"圣经中记载参孙吃了哪里的蜜？\",\"type\":\"士\",\"answers\":[\"死狮内\",\"蜂巢\",\"非利士女子送的\",\"花丛\"],\"objectId\":\"TntvTMMQ\",\"createdAt\":\"2018-05-24 21:28:23\",\"updatedAt\":\"2018-05-24 21:30:40\"},{\"hint\":\"士2：8，士2：16\",\"topic\":\"约书亚死后，以色列进入什么时代？\",\"type\":\"士\",\"answers\":[\"士师\",\"统一王国\",\"王国分裂\",\"旷野\"],\"objectId\":\"k8acIIIg\",\"createdAt\":\"2018-04-09 10:37:54\",\"updatedAt\":\"2018-05-24 21:09:47\"},{\"hint\":\"士3：11，士3：30\",\"topic\":\"神兴起士师‘俄陀聂’和‘以笏’后分别国中太平多少年？\",\"type\":\"士\",\"answers\":[\"40 80\",\"20 40\",\"80 30\",\"10 40\"],\"objectId\":\"pvZaBBBJ\",\"createdAt\":\"2018-04-09 10:38:32\",\"updatedAt\":\"2018-05-24 21:09:46\"},{\"hint\":\"士21：1\",\"topic\":\"什么人起誓不将女儿给便雅悯人为妻？\",\"type\":\"士\",\"answers\":[\"以色列\",\"摩押\",\"亚扪\",\"非利士\"],\"objectId\":\"SWwk9VVj\",\"createdAt\":\"2018-05-24 21:43:30\",\"updatedAt\":\"2018-05-24 21:43:57\"},{\"hint\":\"士13：25\",\"topic\":\"耶和华的灵在哪里感动参孙？\",\"type\":\"士\",\"answers\":[\"玛哈尼但\",\"琐拉\",\"以实陶\",\"以坦\"],\"objectId\":\"NCdIMEEM\",\"createdAt\":\"2018-05-24 21:25:50\",\"updatedAt\":\"2018-05-24 21:26:22\"},{\"hint\":\"士6：36-40\",\"topic\":\"士师基甸向神求的什么印证？\",\"type\":\"士\",\"answers\":[\"羊毛印证\",\"日头停留 月亮止住\",\"一人必追赶千人\",\"军中无一人伤亡\"],\"objectId\":\"XhyWPPPT\",\"createdAt\":\"2018-05-24 21:11:57\",\"updatedAt\":\"2018-05-24 21:12:36\"},{\"hint\":\"创11:20\",\"topic\":\"拉吴多少岁生的西鹿？\",\"type\":\"士\",\"answers\":[\"32岁\",\"30岁\",\"33岁\",\"35岁\"],\"objectId\":\"Jb5nAAAE\",\"createdAt\":\"2018-04-08 17:09:55\",\"updatedAt\":\"2018-05-24 21:09:49\"}]"
 				}
 			]
 		}

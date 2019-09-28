@@ -2,7 +2,7 @@
 
 var app = getApp()
 //var common = require("../../utils/common.js")
-var Bmob = require("../../utils/bmob.js");
+// var Bmob = require("../../utils/bmob.js");
 var util = require('../../utils/util.js');
 var _this = this;
 // pages/main/main.js
@@ -16,32 +16,94 @@ Page({
     userImg: "",
     answerHint: "",
     theMounth: "",
-    markedWords:""
+    markedWords: "",
+    canIUse: '',
+    aNumber:0
   },
-
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
+  onLoad: function () {
+    wx.clearStorage()
+    _this = this
+    // 查看是否授权
+    wx.getSetting({
+      success: function (res) { 
+        _this.setData({
+          canIUse: "1"
+        })
+        if (res.authSetting['scope.userInfo']) {
+          _this.registerOrLoginUser();
+        }
+       
+      }
+    })
   },
+  bindGetUserInfo: function (e) {
+    //用户点击了拒绝
+    if (e.detail.userInfo == null) {
+
+
+    } else {//用户点了同意
+    
+      _this.setData({
+        canIUse: "1"
+      })
+      _this.registerOrLoginUser();
+    }
+  },
+initINITDATA:function(){
+    console.log("开始......");
+      var Diary = Bmob.Object.extend("_User");
+
+      var query = new Bmob.Query(Diary);
+      query.descending('a_number');//以答题次数为升序
+       query.limit(3000); 
+      query.find({
+        success: function (results) {
+          console.log("共查询到 ===" + results.length + " 条记录");
+
+          for(var i = 0;i < results.length;i++){ 
+
+            results[i].set('mscore', 0) 
+            results[i].set('a_number', 0)
+            results[i].save();
+            console.log("初始化=="+i);
+          }
+
+
+        },
+        error: function (error) { 
+
+          console.log("查询失败: " + error.code + " " + error.message);
+        }
+      });
+ 
+},
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    _this = this;
+
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    _this = this;
-    this.getCurrentUserInfo()
-    _this.getCurrentVInfo()
-  
+    try {
+      //地址
+      wx.setStorageSync('biblequiz_login', 'http://10.72.138.189:8085/passport/weixinLogin')
+
+
+
+
+    } catch (e) { }
+
+    // _this.initINITDATA()
+    // var currentUser = Bmob.User.current();
+    // _this.setUserForUI(currentUser)
+    // _this.getCurrentVInfo()
+
+   // _this.updateSmallApp()
   },
 
   /**
@@ -59,119 +121,115 @@ Page({
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
 
   },
-  //登录与注册
-  getCurrentUserInfo: function () {
-    _this.formatTime();
-    var user = new Bmob.User();//实例化
-    wx.login({
+
+
+  //注册登录
+  /**
+   * usType:0:注册  1:登录
+   */
+  registerOrLoginUser: function () {
+    _this.formatTime();//更新当前时间
+
+    wx.showLoading({
+      title: '初始化',
+    })
+
+    wx.getUserInfo({
       success: function (res) {
-        user.loginWithWeapp(res.code).then(function (user) {
-          var openid = user.get("authData").weapp.openid;
-          console.log(user, 'user', user.id, res);
-          if (user.get("nickName")) {
-            _this.setUserForUI(user)
-            // 第二次登录，打印用户之前保存的昵称
-            //更新openid
-            wx.setStorageSync('openid', openid)
-          } else {//注册成功的情况
-            var u = Bmob.Object.extend("_User");
-            var query = new Bmob.Query(u);
-            query.get(user.id, {
-              success: function (result) {
-                wx.setStorageSync('own', result.get("uid"));
-                console.log("登录成功");
-              },
-              error: function (result, error) {
-                console.log("查询失败");
-              }
-            });
-            //保存用户其他信息，比如昵称头像之类的
-            wx.getUserInfo({
-              success: function (result) {
+        var userInfo = res.userInfo
+        var nickName = userInfo.nickName
+        var avatarUrl = userInfo.avatarUrl
+        var gender = userInfo.gender //性别 0：未知、1：男、2：女
+        var province = userInfo.province
+        var city = userInfo.city
+        var country = userInfo.country
+        
+        var loginUrl ;
+        try {
+          loginUrl = wx.getStorageSync('biblequiz_login')
+        } catch (e) { }
 
-                var userInfo = result.userInfo;
-                var nickName = userInfo.nickName;
-                var avatarUrl = userInfo.avatarUrl;
+        wx.login({
+          success(res) {
+            if (res.code) {
 
-                var u = Bmob.Object.extend("_User");
-                var query = new Bmob.Query(u);
-                // 这个 id 是要修改条目的 id，你在生成这个存储并成功时可以获取到，请看前面的文档
-                query.get(user.id, {
-                  success: function (result) {
-                    // 自动绑定之前的账号
-                    result.set('nickName', nickName);
-                    result.set("userPic", avatarUrl);
-                    result.set("openid", openid);
-                    result.save();
-                  }
-                });
-              }
-            });
+              console.log(" res.code=" + res.code)
+              // return;
+
+              wx.request({
+                url: loginUrl, //仅为示例，并非真实的接口地址
+                method: 'POST',
+                dataType: 'json', 
+                data: {
+                  appid: "wx116bb648d30156d2",
+                  secret: "81507aae7ddf0002ef94fe43052ee33a",
+                  js_code: res.code,
+                  grant_type: "authorization_code",
+                  nickname: nickName,
+                  avatar: avatarUrl,
+                  gender: gender
+                },
+                header: {
+                  'content-type': 'application/x-www-form-urlencoded' // 默认值
+                },
+                success(res) {
+                  wx.hideLoading()
+                  console.log(res.data)
+                  console.log("res.data.data.JSESSIONID=" + res.data.data.JSESSIONID)
+                  wx.setStorage({
+                    key: "bq_jsessionid",
+                    data: res.data.data.JSESSIONID
+                  })
+                  _this.setData({
+                    score: res.data.data.weixinMarkScore
+                  });
+                }, fail(e) {
+                  wx.hideLoading()
+                }
+              })
+            } else {
+              wx.hideLoading()
+              console.log('登录失败！' + res.errMsg)
+            }
           }
-        }, function (err) {
-          console.log(err, 'errr');
-        });
+        })
       }
-    });
-  },
+    })
+
+      },
+
   setUserForUI: function (cUser) {
-    console.log(cUser.get("nickName"), 'cUser.get("nickName")');
-    console.log(cUser.get("openid"), 'cUser.get("nickName")');
-
-    wx.setStorage({
-      key: "name",
-      data: cUser.get("nickName")
-    })
-
-    wx.setStorage({
-      key: "icon",
-      data: cUser.get("userPic")
-    })
-    _this.setData({
-      userImg: cUser.get("userPic")
-    });
-
- 
-
-    wx.getStorage({
-      key: 'name',
-      success: function (res) {
-        var mmres = res.data;
-        if (res.data.length > 10) {
-          mmres = res.data.substring(0, 10);
-        }
-        _this.setData({
-          userName: mmres
-        });
-      }
-    })
-  
-
     var Diary = Bmob.Object.extend("User");
     var query = new Bmob.Query(Diary);
-    query.equalTo("openid", cUser.get("openid"));
+    query.equalTo("openid", cUser.openid);
     // 查询所有数据
     query.first({
       success: function (object) {
-        console.log(object.id + "得分=" + object.get('mscore'));
+console.log("查了")
+
+        wx.setStorage({
+          key: "name",
+          data: object.get('nickName')
+        })
+
+        _this.setData({
+          userName: object.get('nickName'), 
+          aNumber:object.get('a_number')
+        });
+
+        wx.setStorage({
+          key: "icon",
+          data: object.get('userPic')
+        })
+        _this.setData({
+          userImg: object.get('userPic')
+        });
+
         wx.setStorage({
           key: "score",
           data: object.get('mscore')
@@ -191,28 +249,46 @@ Page({
   },
   //开始答题按钮
   goAsk: function () {
-    wx.navigateTo({
-      url: '../ask/ask'
-    })
+    let tag = _this.data.canIUse
+    if (tag) {
+      wx.navigateTo({
+        url: '../ask/ask'
+      })
+    } else {
+      wx.showToast({
+        title: '点👇他一下呗',
+        icon: 'none',
+        image:'../../images/icon_person_women.png',
+        duration: 2000
+      })
+    }
+
   },
-  //关于我们按钮
+  //排行
   aboutWe: function () {
+    let tag = _this.data.canIUse
+    if (tag) {
     wx.navigateTo({
       url: '../ranklist/ranklist'
     })
+    } else {
+      wx.showToast({
+        title: '咱就点👇他一下~',
+        icon: 'none',
+        duration: 2000
+      })
+    }
   },
-  //更多精彩按钮
+  //关于
   moreContent: function () {
-    wx.showToast({
-      title: '程序猿偷懒啦...',
-      icon: 'success',
-      duration: 2000
+    wx.navigateTo({
+      url: '../aboutwe/aboutwe'
     })
   },
 
   formatTime: function () {
-   
-    // 调用函数时，传入new Date()参数，返回值是日期和时间  
+
+    // 调用函数时，传入new Date()参数，返回值是日期和时间    
     var time = util.formatTime(new Date());
     // 再通过setData更改Page()里面的data，动态更新页面的数据  
     this.setData({
@@ -226,22 +302,20 @@ Page({
     query.first({
       success: function (object) {
         // 查询成功
-     
-      that.setData({
-        answerHint: object.get('s_hint'),
-        markedWords: object.get('sNotice')
-      })
+
+        that.setData({
+          answerHint: object.get('s_hint'),
+          markedWords: object.get('sNotice')
+        })
         wx.setStorage({
           key: "ask_type",
           data: object.get('ask_type')
         })
-
-
       },
       error: function (error) {
         console.log("查询失败: " + error.code + " " + error.message);
       }
-    });
-  }
-  
+    }); 
+  },
+
 })

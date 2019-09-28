@@ -2,13 +2,14 @@ const util = require('../../utils/util.js')
 var Bmob = require("../../utils/bmob.js");
 /**
  * 音频相关
- */
+ */ 
 var innerAudioContext;
 var timeLittleContext;
 var readyContext;
 var askContext;
 var gameOverContext;
 var clickContext;
+var stopStatus = "none"
 
 var mainBgmPath = "http://bmob-cdn-9637.b0.upaiyun.com/2018/05/23/021776c640e818fb805286d722671273.mp3";
 var timeLittlePath = "http://bmob-cdn-9637.b0.upaiyun.com/2018/05/23/5516d59a40ed7d23805e17895c4e1759.mp3";
@@ -31,7 +32,7 @@ var allQustions = new Array;//所有的答题
 var thisQustions = new Array;//本次的答题
 var myChoose = new Array;//记录我的选择
 
-var answerNum = 3;//每次答题个数
+var answerNum = 10;//每次答题个数
 var thisIndex = 0;//当前题目下标
 var disorganizeAnswers = new Array;//本次答题的答案，乱序
 var countdownNum = 20;//倒计时
@@ -100,7 +101,6 @@ Page({
       success: function (res) {
         console.log(res.data)
 
- 
         var Diary = Bmob.Object.extend("questionBank");
         var query = new Bmob.Query(Diary);
         // 查询所有数据
@@ -112,8 +112,6 @@ Page({
 
             allQustions = results;
             that.startAnimate();//定义开始动画
-
-
           },
           error: function (error) {
             wx.hideToast()
@@ -127,15 +125,8 @@ Page({
             console.log("查询失败: " + error.code + " " + error.message);
           }
         });
-
-
       }
     })
-
-
-
-
-
   },
   restAnswer: function () {
     this.data.count = 0;
@@ -256,6 +247,9 @@ Page({
 
     that.startOtherBgm('tap')
     if (!that.data.local_click) {  //防止重新选择答案
+      that.setData({
+        local_click: true
+      })
       var mS = disorganizeAnswers[e.currentTarget.dataset.index];//我的选择
       var successAsk = thisQustions[thisIndex].get('answers')[0];//正确选项
 
@@ -326,22 +320,27 @@ Page({
             wx.getStorage({
               key: 'objid',
               success: function (res) {
-              var Diary = Bmob.Object.extend("User");
-              var query = new Bmob.Query(Diary);
-              query.get(res.data, {
-                success: function (result) {
-                  console.log(result.get("mscore")+"返回"+result.id)
-                  let mmcore = (that.data.score_myself + result.get("mscore"))/2
-                  mmcore = Math.floor(mmcore * 100) / 100; // 取小数点后两位
-                  console.log("结算传送=(" + result.get("mscore") + "+" + that.data.score_myself +")/2=="+ mmcore)
-                  result.set('mscore', mmcore)
-                  result.save();
-                },
-                error: function (object, error) {
-                }
-              });
-            }
-          })
+                var Diary = Bmob.Object.extend("User");
+                var query = new Bmob.Query(Diary);
+                query.get(res.data, {
+                  success: function (result) {
+                    console.log(result.get("mscore") + "返回" + result.get("a_number"))
+                    let mmAnumber = 0
+                    if (result.get("a_number") != null && result.get("a_number") != ""){
+                      mmAnumber = result.get("a_number")
+                    }
+                    let mmcore = (that.data.score_myself + result.get("mscore")) / 2
+                    mmcore = Math.floor(mmcore * 100) / 100; // 取小数点后两位
+                    console.log("结算传送=(" + result.get("mscore") + "+" + that.data.score_myself + ")/2==" + mmcore)
+                    result.set('mscore', mmcore)
+                    result.set('a_number', mmAnumber++)
+                    result.save();
+                  },
+                  error: function (object, error) {
+                  }
+                });
+              }
+            })
 
 
 
@@ -381,6 +380,13 @@ Page({
             var query = new Bmob.Query(Diary);
             query.get(res.data, {
               success: function (result) {
+                let mmAnumber = 0
+                if (result.get("a_number") != null && result.get("a_number") != "") {
+                  mmAnumber = result.get("a_number")
+                }
+                mmAnumber += 1
+                console.log('答题次数=='+mmAnumber)
+                result.set('a_number', mmAnumber)
                 result.set('mscore', 0)
                 result.save();
               },
@@ -437,7 +443,7 @@ Page({
     that.setData({
       score_myself: theScore
     })
-    
+
   },
   continue_fighting: function () {
     wx.navigateBack({
@@ -451,10 +457,13 @@ Page({
     wx.navigateTo({
       url: '../lookback/lookback?id=1&alist=' + answers + '&clist=' + choose
     })
+    stopStatus = "over"
+    that.clearTimeInterval(that);
+    that.closeBgm();
   },
   startAnimate: function () {
     const that = this
-   
+
     that.readyContext.play()
     that.setData({
       zoomIn: 'zoomIn'
@@ -664,7 +673,7 @@ Page({
       console.log(res.target)
     }
     return {
-      title: '今天的读经你记住了吗？',
+      title: '今天的读经U记住了吗？',
       path: '/pages/main/main'
     }
   },
@@ -775,20 +784,23 @@ Page({
     this.stopTap();
   },
   onShow: function () {
-
-    var that = this;
-    if (that.innerAudioContext == null) {
-      that.initBgm()
-    } else {
-      if (this.data.lastNum != null && this.data.lastNum != 0) {
-        this.restartTap();
-        if (this.data.lastNum <= 10) {
-          that.timeLittleContext.play()
-        } else {
-          that.startBgm();
+    if (stopStatus != "over") {
+      var that = this;
+      if (that.innerAudioContext == null) {
+        that.initBgm()
+      } else {
+        if (this.data.lastNum != null && this.data.lastNum != 0) {
+          this.restartTap();
+          if (this.data.lastNum <= 10) {
+            that.timeLittleContext.play()
+          } else {
+            that.startBgm();
+          }
         }
       }
     }
+
+
   },
   closeBgm: function () {
     var that = this;
@@ -847,7 +859,12 @@ Page({
    */
   onUnload: function () {
     var that = this;
-    //  clearInterval(this.countTimer);
+    stopStatus = "none"
+    thisQustions = ""
+    thisQustions = new Array
+    myChoose = ""
+    myChoose = new Array
+
     thisIndex = 0;
     that.setData({
       thisIndex: 0

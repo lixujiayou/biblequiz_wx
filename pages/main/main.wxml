@@ -3,20 +3,46 @@
  
   <view class='person-infor animated '>
     <image class='bg ' src='../../images/main_bg.jpg'></image>
-    <view>
-      <image src='{{userImg}}' class='avatarUrl '></image>
+    <view class='avatarUrl'>
+     <open-data class='avatarUrl'  type="userAvatarUrl" ></open-data>
+       <!-- <image src='{{userImg}}' class='avatarUrl '></image> -->
     </view>
+    
 
     <view class='userInfo '>
-      <text>{{userName}}</text>
+      <!-- <text>{{userName}}</text> -->
+      
+      <open-data class='nickName' type="userNickName"></open-data>
 
       <view>评分:\t{{score}}</view>
+       
       <progress percent="{{score}}" style='border-radius: 15rpx;' color="#4090FF" backgroundColor='#AAD0FF' active stroke-width="5" />
     </view>
+
+    <view class='userInfo_2 ' style='margin-left:120px;'>
+
+
+      <view>{{aNumber?aNumber:0}} 次</view>
+
+    </view>
+    <!-- <view class='userInfo_2 '> 
+      
+
+      <view>评分:\t{{score}}</view>
+     
+    </view> -->
+    
      <view>
-    <image src='../../images/entry_qr.svg'  class='qr' bindtap='aboutwe' ></image>
+
+     
+    <image src='../../images/entry_qr.svg'  class='qr' bindtap='moreContent' ></image>
  </view> 
+
+
+ 
   </view>
+
+  
 
   <view class='choose' style='margin-top: 0rpx;' bindtap='goAsk'>
     <image src='../../images/main_answer.png'></image>
@@ -42,5 +68,7 @@
 
 
   </view>
+  <button class="mini-btn" type="primary" size="mini" wx:if="{{!canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
+  
   <view style='color:#D4D4DC;font-size:24rpx; margin-top:180rpx'>{{markedWords}}</view>
 </view>

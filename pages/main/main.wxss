@@ -9,9 +9,15 @@ page {
    position: relative;
   color: #f6f6f6;
   color: white;  
-
+  background: '../../images/icon_rank_item_bg.png'
 
 }
+
+
+/* display: flex;align-items: center; */
+
+
+
 .bg {
   width: 750rpx;
   height: 260rpx;
@@ -34,8 +40,33 @@ page {
   color: black; 
 }
 
+.nickName{
+  font-weight: bold;
+  font-size: 32rpx;
+  position: relative;
+  margin-left: 120rpx;
+  color: #0D72F4; 
+}
 
 .userInfo text{
+  font-weight: bold;
+  font-size: 32rpx;
+  position: relative;
+  margin-left: 120rpx;
+  color: #0D72F4; 
+}
+
+.userInfo_2 view{
+  font-weight: 300;
+  position: relative;
+  font-size: 26rpx;
+   margin-top: 5rpx;
+   margin-left: 76rpx;
+    color: #0D72F4; 
+}
+
+
+.userInfo_2 text{
   font-weight: bold;
   font-size: 32rpx;
   position: relative;
@@ -54,7 +85,7 @@ page {
  border-radius: 15rpx
 }
 .otherInfo{
-  font-weight: bold;
+  font-weight: bold;                 
   font-size: 26rpx;
   position: relative;
   left: 180%;

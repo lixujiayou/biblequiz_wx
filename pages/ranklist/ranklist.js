@@ -10,9 +10,10 @@ Page({
    * 页面的初始数据
    */
   data: {
-    ranklist:''
+    ranklist:'',
+    scroHeight:330,
+    isMe:''
   },
-
   /**
    * 生命周期函数--监听页面加载
    */
@@ -24,7 +25,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+    _this.getSys()
     _this.getRankList()
   },
 
@@ -67,8 +68,15 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
-  
+  onShareAppMessage: function (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    return {
+      title: '今天的读经U记住了吗？',
+      path: '/pages/main/main'
+    }
   },
   
   loadingTap: function () {
@@ -80,24 +88,35 @@ Page({
   },
   getRankList: function () {
 
-    this.loadingTap();
+    wx.getStorage({
+      key: 'objid',
+      success: function (res) {
+
+    _this.loadingTap();
     var user = Bmob.Object.extend("_User");
     var query = new Bmob.Query(user);
     query.descending("mscore");//以分数为降序
+    query.ascending('a_number');//以答题次数为升序
     query.greaterThan("mscore", 0);//大于0分
-    query.limit(15);
+    query.limit(20);
     // 查询所有数据
     query.find({ 
       success: function (results) {
         wx.hideToast()
-        _this.setData({
-          ranklist: results
+        _this.setData({ 
+          ranklist: results 
         })
         console.log("共查询到 " + results.length + " 条记录");
         // 循环处理查询到的数据
         for (var i = 0; i < results.length; i++) {
           var object = results[i];
-          console.log(object.id + ' - ' + object.get('mscore'));
+          
+          if (object.id == res.data){
+        
+            _this.setData({ 
+              isMe:i+1
+            })
+          }
         }
       },
       error: function (error) {
@@ -112,6 +131,30 @@ Page({
         console.log("查询失败: " + error.code + " " + error.message);
       }
     });
+
+      }
+    })
+
+
+
+  },
+  getSys: function(){
+    wx.getSystemInfo({ 
+      success: function (res) {
+
+        if (res.windowHeight > 700 && res.screenHeight > 800){
+          _this.setData({
+            scroHeight: res.windowHeight / 5.5 * 3 + res.statusBarHeight
+          })
+        }else{
+        _this.setData({ 
+          scroHeight: res.windowHeight / 5.5 * 3
+          })
+      }
+
+      }
+    })
+
   }
 
 })

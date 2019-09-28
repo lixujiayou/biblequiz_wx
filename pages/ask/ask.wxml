@@ -75,8 +75,8 @@
     <view >＋{{score_myself}}</view>
   </view>
   <view>
-     <image class='floating' bindtap='lookback' src='../../images/quit.svg' style=''></image> 
+     <image class='floating' bindtap='lookback' src='../../images/quit.png' style=''></image> 
     <button bindtap='continue_fighting'>继续挑战</button>
     <button style='background: #F17D2E;color:#FFFFFF;   margin-top: 20rpx;'  open-type='share' >分享</button>
-  </view>
+  </view> 
 </view>

@@ -1,3 +1,51 @@
-<!--pages/aboutwe/aboutwe.wxml-->
-<text>pages/aboutwe/aboutwe.wxml</text>
- <image src='../../images/main_bg.jpg'></image> 
+<!--pages/main/main.wxml-->
+<view class='container'>
+
+  <view class='person-infor '>
+    <image class='bg ' src='../../images/icon_about_bg.png'></image>
+
+    <view style='width:100%;height:100%; text-align: center; margin-top:65px;'>
+      <text style='color:#287AF1;   font-weight: 300;'>圣经问答Lite
+      </text>
+      </view>
+
+
+  </view>
+
+  <view class=' user-con-box' style='padding-bottom:20px; margin-bottom:6px;'>
+    <text class='big-text-1'>·</text>
+    <text class='big-text-2'>我们的介绍</text>
+    <text class='small-text' decode="{{true}}">{{content}}</text>
+
+    <text class='big-text-1' decode="{{true}}">\n\n·</text>
+    <text class='big-text-2'>玩法规则</text>
+    <text class='small-text' decode="{{true}}">{{content_rule}}</text>
+    <text class='small-text' decode="{{true}}">\n&nbsp;&nbsp;&nbsp;&nbsp;1. 每局10题，均为单选题；每道题有20秒的作答时间，仅有一次作答机会;</text>
+    <text class='small-text' decode="{{true}}">\n&nbsp;&nbsp;&nbsp;&nbsp;2. 超时提交答案，或提交错误答案，将会终止并结算本局答题，分数清零且无法继续作答;</text>
+    <text class='small-text' decode="{{true}}">\n&nbsp;&nbsp;&nbsp;&nbsp;3. 评分 = (本次得分 + 总评分) ÷ 2；</text>
+    <text class='small-text' decode="{{true}}">\n&nbsp;&nbsp;&nbsp;&nbsp;剩余时间 >= 16，加10分；</text>
+    <text class='small-text' decode="{{true}}">\n&nbsp;&nbsp;&nbsp;&nbsp;16 > 剩余时间 >= 13，加8分；</text>
+    <text class='small-text' decode="{{true}}">\n&nbsp;&nbsp;&nbsp;&nbsp;13 > 剩余时间 >= 7，加6分；</text>
+    <text class='small-text' decode="{{true}}">\n&nbsp;&nbsp;&nbsp;&nbsp;7 > 剩余时间 > 0，加4分；</text>
+    <text class='small-text' decode="{{true}}">\n&nbsp;&nbsp;&nbsp;&nbsp;剩余时间 = 0，全部清零。\n\n</text>
+<text class='big-text-1'>·</text>
+    <text class='big-text-2'>联系小答</text>
+    <text class='small-text' decode="{{true}}">\n&nbsp;&nbsp;&nbsp;&nbsp;小答熬了几天夜，就不逼他写反馈页面啦，弟兄姊妹有问题或需要直接联系小答喽~</text>
+    <text class='small-text' bindtap='copyWX' decode="{{true}}">\n&nbsp;&nbsp;&nbsp;&nbsp;微信：LYJONE1</text>
+
+     <text class='small-small-text' bindtap='copyWX' decode="{{true}}">&nbsp;&nbsp;(点我复制)</text>
+    <text class='small-text' bindtap='copyWB'decode="{{true}}">\n&nbsp;&nbsp;&nbsp;&nbsp;微博：hi小答</text>
+    <text class='small-small-text' bindtap='copyWB' decode="{{true}}">&nbsp;&nbsp;(点我复制)</text>
+    <text class='small-text' bindtap='copyQQ' decode="{{true}}">\n&nbsp;&nbsp;&nbsp;&nbsp;QQ：599878311</text>
+    <text class='small-small-text' bindtap='copyQQ'  decode="{{true}}">&nbsp;&nbsp;(点我复制)</text>
+    <text class='big-text-1'>\n\n·</text>
+    <text class='big-text-2'>其它</text>
+    <text class='small-text' decode="{{true}}">{{content_other}}</text>
+
+
+  </view>
+
+<view style='margin-bottom:80px; color:#171717; ' >
+以马内利
+</view>
+</view>

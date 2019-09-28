@@ -3,6 +3,14 @@ var Bmob = require("utils/bmob.js");
 var common = require("utils/common.js");
 Bmob.initialize("21bfb1f1037b3963aaa2fe01bee1bc68", "2ad5eef1e9db172e8448216b0f16a5b8");
 // Bmob.initialize("2ad5eef1e9db172e8448216b0f16a5b8", "21bfb1f1037b3963aaa2fe01bee1bc68");
+
+// 答题回顾点击后停止计时
+// 答题回顾返回后音乐继续响
+
+// 微信改名后没有及时更改用户名
+
+
+
 App({
   onLaunch: function () {
    // this.getCurrentUserInfo();

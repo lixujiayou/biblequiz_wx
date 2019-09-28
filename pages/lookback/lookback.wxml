@@ -5,42 +5,45 @@
 </view>
 </view>
 
-
 <view class='body'>
   <view class='content '>
-    <view>
-   
-      <view class='process'>
-        <view class='process_son' style='height: {{score_myself}}%;'></view>
-      </view>
- </view>
-
- 
+  
+  <view class='process '>  
+       <image class='process_son  invisible{{leftIsShow}}' bindtap='lefttap' src='../../images/icon_lefthave.png'></image> 
+       </view>  
 
   <view class="page-section page-section-spacing swiper">
-    <swiper style="height:950rpx; " bindchange="listenSwiper">
-      <block wx:for="{{thisQustions}}" wx:key="*this">
+
+  
+    <swiper style="height:1000rpx; " bindchange="listenSwiper" current="{{currentIndex}}">
+      <block wx:for="{{thisQustions}}" wx:key="*this" data-index="{{index}}">
         <swiper-item>
 
           <view class='answerarea ' style='width:100%; '>
         
-          <text  >{{item.topic}}</text>
+          <text  style='font-size:15px'>{{item.topic}}</text>
 
             <view wx:for="{{item.answers}}" data-index="{{index}}"  class="{{index == 0  ? 'right':'' }}  answer " >
               <view style='width:100%;'>{{item}}</view>
             </view>
-  <view >参考：{{item.hint}}</view>
+  <view >参考:{{item.hint}}</view>
+  <text>{{myChoose[index] == item.answers[0] ? '我答对啦！':"正确答案是:<"+item.answers[0]+">,我选择了:"+myChoose[index]}}</text>
           </view>
         </swiper-item>
       </block>
     </swiper>
   </view>
 
-<view>
+<!-- <view>
       <view class='process'>
         <view class='process_son' ></view>
       </view>
-    </view>
+    </view> -->
+
+  <view class='processright '> 
+       <image class='process_son invisible{{rightIsShow}}' bindtap='righttap'src='../../images/icon_righthave.png'></image> 
+       </view>   
+
   </view>
 </view>
 
