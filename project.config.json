@@ -18,7 +18,7 @@
 		}
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.8.3",
+	"libVersion": "2.9.2",
 	"appid": "wx116bb648d30156d2",
 	"projectname": "bibleAsk1",
 	"simulatorType": "wechat",

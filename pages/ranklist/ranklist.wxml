@@ -22,7 +22,7 @@
             
             <view class="p20 person-infor">
               <image src='{{item.userPic != undefined ? item.userPic : "../../images/icon_default.png"}}' class='avatarUrl '></image>
-
+              
               <view class='userInfo '>
                 <text>{{item.nickName?item.nickName:"圣经问答用户"}}</text>
                 <view>{{item.mscore?item.mscore:'0'}}</view>
@@ -31,7 +31,7 @@
 
                 
               </view>
-               <view class='userInfo_2' >
+               <view class='userInfo_2'>
                 <text >{{item.location?item.location:"UNKNOWN"}}</text>
                 <view>{{item.a_number?item.a_number:"0"}} 次</view>
               </view>
